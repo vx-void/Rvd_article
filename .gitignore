@@ -1,9 +1,6 @@
 # Environment variables
 .env
-.env.local
-.env.*.local
 
-# Исключите .env.example — он должен быть в репозитории
 !.env.example
 
 # Python

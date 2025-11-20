@@ -4,12 +4,14 @@ from dotenv import load_dotenv
 class Config:
 
     # Supabase config
-    SUPABASE_URL = load_dotenv('SUPABASE_URL')
-    SUPABASE_KEY = load_dotenv('SUPABASE_HOST')
-    SUPABASE_DATABASE = load_dotenv('SUPABASE_DATABASE')
-    SUPABASE_USER = 'SUPABASE_USER'
-    SUPABASE_PASSWORD = 'SUPABASE_PASSWORD'
-    SUPABASE_PORT = 'SUPABASE_PORT'
+    SUPABASE_URL = os.environ.get('SUPABASE_URL')
+    SUPABASE_KEY = os.environ.get('SUPABASE_KEY')
+    SUPABASE_HOST = os.environ.get('SUPABASE_HOST')
+    SUPABASE_DATABASE = os.environ.get('SUPABASE_DATABASE')
+    SUPABASE_USER = os.environ.get('SUPABASE_USER')
+    SUPABASE_PASSWORD = os.environ.get('SUPABASE_PASSWORD')
+    SUPABASE_PORT = os.environ.get('SUPABASE_PORT')
+
 
     #Cryptography
     CRYPTO_SECRET_KEY = os.environ.get('CRYPTO_SECRET_KEY')
