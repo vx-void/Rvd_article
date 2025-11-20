@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ГИДРОПОИСК - Умная система идентификации гидрокомплектующих</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>ГИДРОПОИСК</h1>
+            <p>Умная система идентификации гидрокомплектующих</p>
+        </div>
+
+        <div class="content">
+            <div class="dev-info">
+                <strong>Режим разработки:</strong> Файл работает локально. Для тестирования нужен запущенный бэкенд.
+            </div>
+
+            <div class="search-container">
+                <div class="input-with-hint">
+                    <label for="componentSearch" class="input-label">Поиск гидрокомплектующих:</label>
+                    <textarea
+                        id="componentSearch"
+                        class="smart-textarea"
+                        placeholder="Введите название или параметры гидравлического компонента..."
+                        rows="4"
+                    ></textarea>
+
+                    <div class="input-status">
+                        <div class="char-counter">Символов: <span id="charCount">0</span>/1000</div>
+                        <div class="processing-indicator hidden">
+                            <div class="spinner"></div>
+                            <span>Анализируем запрос...</span>
+                        </div>
+                    </div>
+
+                    <div id="loading" class="loading" style="display: none;">
+                        Отправка запроса на сервер...
+                    </div>
+
+                    <div id="status" class="status"></div>
+
+                    <div class="format-tip">
+                         <strong>Можно вводить несколько позиций — каждая с новой строки. Система автоматически определит тип компонента и артикул.</strong>
+                    </div>
+                </div>
+
+                <button class="search-btn" id="searchButton">Найти артикулы</button>
+            </div>
+
+            <div class="results-section" id="resultsSection">
+                <h2 class="results-title">Результаты поиска:</h2>
+
+                <div id="articlesContainer" class="hidden">
+                    <div class="articles-title">Найденные артикулы:</div>
+                    <div class="articles-result" id="articlesResult"></div>
+                </div>
+
+                <div id="detailedResultsContainer">
+                    <div id="resultsContainer">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Система автоматической идентификации гидравлических компонентов © 2025</p>
+        </div>
+    </div>
+
+</body>
+</html>
