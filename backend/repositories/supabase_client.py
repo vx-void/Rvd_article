@@ -1,8 +1,8 @@
 # supabase_client.py
-from typing import Any, Dict, List, Union
-from config import Config
+from typing import Any
+from backend.config import Config
 from supabase import create_client, Client
-import os
+
 
 class SupabaseClientModule:
     def __init__(self, supabase_url: str, supabase_key: str):

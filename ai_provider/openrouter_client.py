@@ -1,6 +1,4 @@
-from flask.cli import load_dotenv
 from openai import OpenAI
-from config import Config
 import sys
 import os
 
@@ -51,7 +49,7 @@ class ComponentModel:
 class Classificator:
     def __init__(self):
         self.ai_client = AIClient()
-        from hydro_find.prompts.component_prompts import CLASSIFICATION
+        from backend.models.prompts.component_prompts import CLASSIFICATION
         self.prompt = CLASSIFICATION
 
     def classification(self, question):

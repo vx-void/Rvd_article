@@ -1,5 +1,3 @@
-from hydro_find.entity.entity import Entity
-
 class Fitting():
     def __init__(self, query,
                  standard: str = None,

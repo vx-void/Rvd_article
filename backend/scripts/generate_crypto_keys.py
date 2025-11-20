@@ -8,7 +8,7 @@ import os
 
 sys.path.append(os.path.dirname(__file__))
 
-from hydro_find.utils.cryptography import CryptographyService, CryptoUtils
+from backend.utils import CryptographyService, CryptoUtils
 
 def main():
     print("Генерация криптографических ключей")

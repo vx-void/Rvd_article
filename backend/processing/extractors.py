@@ -1,5 +1,5 @@
-from AI.openrouter_client import ComponentModel
-from hydro_find.prompts.component_prompts import *
+from ai_provider.openrouter_client import ComponentModel
+from backend.models.prompts.component_prompts import *
 
 
 
