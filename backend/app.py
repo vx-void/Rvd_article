@@ -6,7 +6,7 @@ import os
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
-from backend.routes.api import bp as api_bp
+from backend.app.routes.api import bp as api_bp
 
 
 def create_app():

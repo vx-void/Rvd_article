@@ -1,5 +1,5 @@
-from ai_provider.openrouter_client import Classificator
-from backend.processing.extractors import get_component_json
+from backend.ai.providers.openrouter_client import Classificator
+from backend.ai.processing.extractors import get_component_json
 
 
 def process_component_query(query: str):

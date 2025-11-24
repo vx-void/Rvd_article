@@ -1,5 +1,5 @@
-from ai_provider.openrouter_client import ComponentModel
-from backend.models.prompts.component_prompts import *
+from backend.ai.providers.openrouter_client import ComponentModel
+from backend.ai.promts.component_prompts import *
 
 
 

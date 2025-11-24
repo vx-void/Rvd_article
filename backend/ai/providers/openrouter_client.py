@@ -49,7 +49,7 @@ class ComponentModel:
 class Classificator:
     def __init__(self):
         self.ai_client = AIClient()
-        from backend.models.prompts.component_prompts import CLASSIFICATION
+        from backend.ai.promts.component_prompts import CLASSIFICATION
         self.prompt = CLASSIFICATION
 
     def classification(self, question):
