@@ -7,7 +7,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
 
 try:
     #from hydro_find.ai.classifiers import classificator
-    from backend.services.ai_service import process_component_query
+    from ai.ai_service import process_component_query
 
     AI_AVAILABLE = True
 except ImportError as e:

@@ -7,8 +7,8 @@ load_dotenv()
 
 from backend.app.core.config import Config
 
-from backend.data.repositories.entity import Entity
-from backend.data.repositories.fitting import Fitting
+from data.repositories.entity import Entity
+from data.repositories.fitting import Fitting
 
 
 class SupabaseClientModule:

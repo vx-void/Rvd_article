@@ -1,6 +1,4 @@
-from backend.ai.providers.openrouter_client import ComponentModel
-from backend.ai.promts.component_prompts import *
-
+from ai.providers.openrouter_client import ComponentModel
 
 
 def extraction(prompt, query):

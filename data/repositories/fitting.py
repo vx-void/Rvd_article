@@ -1,4 +1,4 @@
-from backend.data.repositories.entity import Entity
+from data.repositories.entity import Entity
 from typing import Optional
 
 
