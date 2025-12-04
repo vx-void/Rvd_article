@@ -5,7 +5,7 @@ import os
 
 #sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
-from backend.routes.api import bp as api_bp
+from routes.api import bp as api_bp
 
 
 # Моковые данные для примера
