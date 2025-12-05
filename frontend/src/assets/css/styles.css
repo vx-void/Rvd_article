@@ -52,17 +52,19 @@ header{
 
     padding-top: 10px;
     padding-bottom: 10px;
-    
-    
-    
+
 }
 
 .inputText{
     position: inherit;
     background-color: red;
     width: 90vw;
-    height: 50vh;
-    margin-left: 1%;
+    height: 30vh;
+    margin-left: 2vw;
+    margin-top: 2vh;
+}
 
-
+button{
+    background-color:darkmagenta;
+    padding: 10px;
 }

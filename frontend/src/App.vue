@@ -13,9 +13,21 @@
         <p>-sfkdjglerjlitgjdfxlkgjlrekjtgpksg</p>
       </div>
     </div>
-    <div class="block_input">
-        <input id="inputText" class="inputText" type="text">
-    </div>
+    
+    <textarea 
+      name="inputText" 
+      id="inputText"
+      class="inputText"
+      rows=10>
+    </textarea>
+
+    <section class="buttonArea">
+      <button>Найти артикулы</button>
+      <button>Очистить Ввод</button>
+    </section>
+    
+    
+
 </template>
 
 <style scoped></style>
