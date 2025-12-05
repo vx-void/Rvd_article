@@ -1,5 +1,9 @@
+<script setup>
+  import './assets/css/styles.css'
+</script>
+
 <template>
-  <header>Поиск артикулов по описанию</header>
+  <header></header>
   <div class="container">
       <div class="instructions">
         <h2 class="h2_insturction">Инструкция</h2>
@@ -10,12 +14,8 @@
       </div>
     </div>
     <div class="block_input">
-        <textarea
-          class="inputText"
-          rows:10>
-        </textarea>
+        <input id="inputText" class="inputText" type="text">
     </div>
-
 </template>
 
-
+<style scoped></style>
