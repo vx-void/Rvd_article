@@ -8,6 +8,8 @@
   },
   "scripts": {
     "dev": "vite",
+    "dev:network":"vite --host",
+    "dev:local":"vite --host 0.0.0.0",
     "build": "vite build",
     "preview": "vite preview"
   },

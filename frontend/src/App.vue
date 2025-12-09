@@ -12,10 +12,12 @@ import ArticleSearchApp from './components/ArticleSearchApp.vue'
 
 <style>
 /* Глобальные стили */
+/*
 #app {
   font-family: Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
 }
+  */
 </style>

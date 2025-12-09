@@ -6,8 +6,13 @@
     
     <main class="main-content">
       <div class="instruction-container">
-        <div class="instructions">
+        
+        
+        <div class="instructions" @click="toggleInstructions">
           <h2 class="instruction-title">Инструкция</h2>
+          <span class="toggle-icon">{{ isExplanded ? '▼' : '▶' }}</span>
+        </div>
+        <div v-if="isExplanded" class="instruction-content">
           <ul class="instruction-list">
             <li>Вставьте текст в поле ввода ниже</li>
             <li>Нажмите кнопку "Найти артикулы" для поиска</li>
@@ -58,9 +63,9 @@ const inputText = ref('')
 const foundArticles = ref([])
 const searchPerformed = ref(false)
 
-const findArticles = () => {
+const findArticles = async () => {
   if (!inputText.value.trim()) {
-    alert('Введите текст для поиска')
+    alert('Введите текст')
     return
   }
   
@@ -94,4 +99,12 @@ const clearInput = () => {
   foundArticles.value = []
   searchPerformed.value = false
 }
+
+const isExplanded = ref(true)
+
+const toggleInstructions = () => {
+  isExplanded.value = !isExplanded.value;
+}
+
+
 </script>

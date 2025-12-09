@@ -6,7 +6,7 @@
 }
 
 .header {
-  background: linear-gradient(135deg, #390bdd, #4964af);
+  background: linear-gradient(135deg, #390bdd, #4562e4);
   height: 80px;
   padding: 0px;
   display: flex;
@@ -41,10 +41,18 @@
 }
 
 .instructions {
-  background-color: white;
-  padding: 25px;
-  border-radius: 10px;
-  border: 1px solid #e9ecef;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  padding: 10px;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+}
+
+.instructions:hover {
+  background-color: rgba(255, 140, 0, 0.1);
 }
 
 .instruction-title {
@@ -102,11 +110,33 @@
   font-style: italic;
 }
 
+/* кнопки*/
+
 .button-area {
   display: flex;
-  gap: 20px;
+  gap: 300px;
   justify-content: center;
   margin-bottom: 40px;
+}
+
+@media(max-width : 1200px){
+  .button-area{
+    gap: 200px;
+  }
+}
+
+@media(max-width : 992px){
+  .button-area{
+    gap: 100px;
+  }
+}
+
+@media(max-width: 768px) {
+  .button-area{
+    flex-direction: column;
+    gap: 20px;
+  }
+  
 }
 
 .btn {
@@ -139,7 +169,7 @@
 }
 
 .btn-secondary:hover {
-  background: linear-gradient(135deg, #5a6268, #343a40);
+  background: linear-gradient(135deg, #5a6268, #ff5a00);
   transform: translateY(-3px);
   box-shadow: 0 5px 15px rgba(108, 117, 125, 0.3);
 }
