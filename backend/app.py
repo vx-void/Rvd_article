@@ -1,5 +1,6 @@
-from flask import Flask, send_from_directory, render_template
+from flask import Flask, send_from_directory, render_template, jsonify
 from flask_cors import CORS
+import requests
 import sys
 import os
 
@@ -8,15 +9,11 @@ import os
 from routes.api import bp as api_bp
 
 
-# Моковые данные для примера
-MOCK_DATABASE = {
+
+EXAMPLE = {
     "фитинг": [
         {"type": "fitting", "text": "FIT-12345", "description": "Фитинг гидравлический 3/4\""},
         {"type": "fitting", "text": "FIT-67890", "description": "Фитинг нержавеющий 1/2\""}
-    ],
-    "шланг": [
-        {"type": "hose", "text": "HOSE-456", "description": "Шланг высокого давления DN20"},
-        {"type": "hose", "text": "HOSE-789", "description": "Шланг резиновый армированный"}
     ],
     "адаптер": [
         {"type": "adapter", "text": "ADP-101", "description": "Адаптер переходной стальной"}
@@ -29,56 +26,23 @@ def create_app():
     app = Flask(__name__)
     CORS(app)
 
-    app.config.from_pyfile('core\\config.py')
+    app.config.from_pyfile('config.py')
     app.register_blueprint(api_bp)
 
     @app.route('/')
     def index():
-       #return render_template('..\\fronten\\index.html')
-       #return send_from_directory(os.path.join(app.root_path,'..', 'templates'), 'index.html')
         pass
     return app
 
 
     @app.route('/api/process-query', methods=['POST'])
     def process_query():
-        """Основной endpoint для обработки запросов"""
-        try:
-            data = request.get_json()
-            if not data or 'message' not in data:
-                return jsonify({"error": "No query provided"}), 400
+        pass
 
-            query = data['message'].lower().strip()
-            print(f"Получен запрос: {query}")
-
-        # Простая логика поиска
-            results = []
-            for keyword, items in MOCK_DATABASE.items():
-                if keyword in query:
-                    results.extend(items)
-
-        # Если ничего не найдено, возвращаем демо-данные
-                if not results:
-                    results = [
-                    {"type": "demo", "text": "DEMO-001", "description": "Демонстрационный компонент 1"},
-                    {"type": "demo", "text": "DEMO-002", "description": "Демонстрационный компонент 2"}
-                    ]
-
-            return jsonify({
-                "status": "success",
-                "query": query,
-                "results": results,
-                "count": len(results)
-                })
-
-        except Exception as e:
-            print(f"Ошибка: {e}")
-            return jsonify({"error": str(e)}), 500
 
 
     @app.route('/api/health', methods=['GET'])
     def health_check():
-        """Проверка работоспособности API"""
         return jsonify({
             "status": "healthy",
             "service": "hydropoisk-api",

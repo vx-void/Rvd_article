@@ -5,10 +5,10 @@ from supabase import create_client, Client
 
 load_dotenv()
 
-from backend.core.config import Config
+from backend.config import Config
 
-from data.repositories.entity import Entity
-from data.repositories.fitting import Fitting
+from backend.data.repositories.entity import Entity
+from backend.data.repositories.fitting import Fitting
 
 
 class SupabaseClientModule:
