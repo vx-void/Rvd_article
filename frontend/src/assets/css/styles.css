@@ -34,7 +34,7 @@
 .instruction-container {
   background-color: #f8f9fa;
   border-radius: 12px;
-  padding: 25px;
+  padding: 5px;
   margin-bottom: 30px;
   border-left: 5px solid #0400ff;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
@@ -46,7 +46,8 @@
   align-items: center;
   cursor: pointer;
   user-select: none;
-  padding: 10px;
+  padding-left: 15px;
+  padding-right: 30px;
   border-radius: 8px;
   transition: background-color 0.2s;
 }
@@ -55,11 +56,24 @@
   background-color: rgba(255, 140, 0, 0.1);
 }
 
+.instruction-content {
+  margin-top: 15px;
+  padding: 15px;
+  background-color: white;
+  border-radius: 8px;
+}
+
+.toggle-icon {
+  font-size: 15px;
+  color: #0400ff;
+}
+
+
 .instruction-title {
   text-align: center;
   margin-bottom: 20px;
   color: #2c3e50;
-  font-size: 24px;
+  font-size: 14px;
   font-weight: 600;
 }
 
@@ -101,8 +115,8 @@
 
 .input-text:focus {
   outline: none;
-  border-color: #ff8c00;
-  box-shadow: 0 0 0 4px rgba(255, 140, 0, 0.15);
+  border-color: #9897f7;
+  box-shadow: 0 0 0 4px rgba(202, 206, 216, 0.15);
 }
 
 .input-text::placeholder {
@@ -174,6 +188,39 @@
   box-shadow: 0 5px 15px rgba(108, 117, 125, 0.3);
 }
 
+.btn-excel{
+    padding: 5px 5px;
+    font-size: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 20px;
+    height: 40px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-right: 5px;
+}
+
+
+.table-header-container{
+
+  display:flex;
+  gap: 450px;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2xp solid #4562e4;
+}
+
+
+.table-header-container h3 {
+  margin: 0; 
+  color: #2c3e50;
+  font-size: 22px;
+  font-weight: 600;
+  padding-bottom: 0; 
+}
+
 .results {
   background-color: #f8f9fa;
   border: 2px solid #e9ecef;
@@ -189,7 +236,7 @@
   color: #2c3e50;
   font-size: 22px;
   font-weight: 600;
-  border-bottom: 2px solid #ff8c00;
+  border-bottom: 2px solid  #4562e4;
   padding-bottom: 10px;
 }
 
@@ -230,6 +277,72 @@
   margin-top: 30px;
   color: #856404;
   font-size: 17px;
+}
+
+
+
+
+/* Таблица */
+.table-container {
+  overflow-x: auto;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.articles-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+}
+
+.articles-table thead {
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+}
+
+.articles-table th {
+  padding: 16px 12px;
+  text-align: left;
+  font-weight: 600;
+  color: #2c3e50;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.articles-table td {
+  padding: 14px 12px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.articles-table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+/* Колонки таблицы */
+.col-1, .col-2, .col-3, .col-4 {
+  width: 25%;
+}
+
+
+.cell{
+  font-family: 'Consolas', 'Monaco', monospace;
+  font-size: 12px;
+
+}
+
+
+/* Сообщение "не найдено" */
+.no-results {
+  text-align: center;
+  padding: 30px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border: 2px dashed #dee2e6;
+  margin-top: 30px;
+}
+
+.no-results p {
+  color: #666;
+  font-size: 18px;
+  margin: 0;
 }
 
 @keyframes fadeIn {
@@ -293,4 +406,8 @@
   .results h3 {
     font-size: 20px;
   }
+
+  .articles-table th,
+  .articles-table td {
+    padding: 10px 8px;
 }

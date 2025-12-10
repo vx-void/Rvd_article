@@ -5,14 +5,12 @@
     </header>
     
     <main class="main-content">
-      <div class="instruction-container">
-        
-        
+      <section class="instruction-container">
         <div class="instructions" @click="toggleInstructions">
           <h2 class="instruction-title">Инструкция</h2>
-          <span class="toggle-icon">{{ isExplanded ? '▼' : '▶' }}</span>
+          <span class="toggle-icon">{{ isExpanded ? '▼' : '▶' }}</span>
         </div>
-        <div v-if="isExplanded" class="instruction-content">
+        <div v-if="isExpanded" class="instruction-content">
           <ul class="instruction-list">
             <li>Вставьте текст в поле ввода ниже</li>
             <li>Нажмите кнопку "Найти артикулы" для поиска</li>
@@ -20,9 +18,9 @@
             <li>Найденные артикулы будут отображены в списке</li>
           </ul>
         </div>
-      </div>
+      </section>
       
-      <div class="input-section">
+      <section class="input-section">
         <textarea 
           v-model="inputText"
           name="inputText" 
@@ -31,7 +29,7 @@
           placeholder="Вставьте ваш текст..."
           rows="10">
         </textarea>
-      </div>
+      </section>
       
       <section class="button-area">
         <button @click="findArticles" class="btn btn-primary">Найти артикулы</button>
@@ -39,14 +37,35 @@
       </section>
       
       <!-- Результаты поиска -->
-      <div v-if="foundArticles.length > 0" class="results">
-        <h3>Найденные артикулы ({{ foundArticles.length }}):</h3>
-        <ul class="articles-list">
-          <li v-for="(article, index) in foundArticles" :key="index" class="article-item">
-            {{ article }}
-          </li>
-        </ul>
-      </div>
+      <section v-if="foundArticles.length > 0" class="results">
+        <div class="table-header-container">
+          <h3>Найденные артикулы ({{ foundArticles.length }}):</h3>
+          <button class="btn btn-excel">скачать .xlsx</button>
+        </div>
+        
+        <div class="table-container">
+          <table class="articles-table">
+            <thead>
+              <tr>
+                <th class="col-1">Запрос</th>
+                <th class="col-2">Наименование</th>
+                <th class="col-3">Артикул</th>
+                <th class="col-4">Количество</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              <!--вывести Результаты из back-end  -->
+              <tr v-for="article in foundArticles" class="article-row">
+                <td class="cell">{{ article}}</td>
+                <td class="cell">Данные 2</td>
+                <td class="cell">Данные 3</td>
+                <td class="cell">Данные 4</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
       
       <!-- Сообщение если ничего не найдено -->
       <div v-if="searchPerformed && foundArticles.length === 0" class="no-results">
@@ -57,54 +76,19 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-
-const inputText = ref('')
-const foundArticles = ref([])
-const searchPerformed = ref(false)
-
-const findArticles = async () => {
-  if (!inputText.value.trim()) {
-    alert('Введите текст')
-    return
-  }
-  
-  searchPerformed.value = true
-  
-  const patterns = [
-    /[A-ZА-Я]{2,}[-_]\d{2,}/gi,
-    /арт\.?\s*\d+/gi,
-    /\b\d{6,}\b/g,
-    /[A-ZА-Я0-9]{5,}/gi
-  ]
-  
-  const allMatches = []
-  
-  patterns.forEach(pattern => {
-    const matches = inputText.value.match(pattern)
-    if (matches) {
-      allMatches.push(...matches)
-    }
-  })
-  
-  foundArticles.value = [...new Set(allMatches)]
-  
-  if (foundArticles.value.length === 0) {
-    console.log('Артикулы не найдены')
-  }
-}
-
-const clearInput = () => {
-  inputText.value = ''
-  foundArticles.value = []
-  searchPerformed.value = false
-}
-
-const isExplanded = ref(true)
-
-const toggleInstructions = () => {
-  isExplanded.value = !isExplanded.value;
-}
-
+  import { useArticles } from '@/composables/useArticles.js'
+  const {
+    inputText,
+    foundArticles,
+    searchPerformed,
+    isExpanded,
+    findArticles,
+    clearInput,
+    toggleInstructions
+  } = useArticles()
 
 </script>
+
+<style scoped>
+
+</style>

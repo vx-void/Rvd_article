@@ -35,7 +35,8 @@ def create_app():
     @app.route('/')
     def index():
        #return render_template('..\\fronten\\index.html')
-       return send_from_directory(os.path.join(app.root_path,'..', 'templates'), 'index.html')
+       #return send_from_directory(os.path.join(app.root_path,'..', 'templates'), 'index.html')
+        pass
     return app
 
 
