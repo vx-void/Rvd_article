@@ -1,71 +1,128 @@
-from openai import OpenAI
-import sys
+import json
 import os
+from typing import Optional, Any, Dict
+from openai import OpenAI
+from dotenv import load_dotenv
 
-# Добавляем путь для импорта
-current_dir = os.path.dirname(__file__)
-project_root = os.path.join(current_dir, '..', '..')
-sys.path.insert(0, project_root)
+from ai.models.types import ComponentType
 
-class AIClient:
-    def __init__(self):
+load_dotenv()
+
+class OpenRouterClient:
+    def __init__(self, model: Optional[str] = None):
         self.api_key = os.getenv('API_OPEN_ROUTER')
-        self.model = os.getenv('DEFAULT_MODEL')
+        self.base_url = os.getenv('OPEN_ROUTER')
+        self.model = model or os.getenv('GEMMA_3_27B_IT')
+
+        if not self.api_key or not self.base_url:
+            raise ValueError("API ключ или URL OpenRouter не настроены")
+
         self.client = OpenAI(
-            base_url=os.getenv('OPEN_ROUTER'),
+            base_url=self.base_url,
             api_key=self.api_key,
             default_headers={
                 "HTTP-Referer": "http://localhost",
                 "X-Title": "Hydro-Search APP"
             }
         )
-        print(f"AI Client создан с моделью: {self.model}")
+
+    def generate_response(
+            self,
+            system_prompt: str,
+            user_query: str,
+            temperature: float = 0.2,
+            timeout: int = 120
+    ) -> Optional[str]:
+        """
+        Args:
+            system_prompt: Системный промпт
+            user_query: Пользовательский запрос
+            temperature: Температура генерации
+            timeout: Таймаут запроса
+
+        Returns:
+            Ответ от модели или None при ошибке
+        """
+        try:
+            response = self.client.chat.completions.create(
+                model=self.model,
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": user_query}
+                ],
+                temperature=temperature,
+                timeout=timeout
+            )
+
+            if response.choices and response.choices[0].message.content:
+                return response.choices[0].message.content.strip()
+
+        except Exception as e:
+            print(f"Ошибка при генерации ответа: {e}")
+
+        return None
 
 
 class ComponentModel:
     def __init__(self, system_prompt: str):
-        self.ai_client = AIClient()
+        self.client = OpenRouterClient()
         self.system_prompt = system_prompt
 
-    def answer(self, question: str) -> str | None:
+    def extract_data(self, query: str) -> Optional[str]:
+        """
+        Args:
+            query: Пользовательский запрос
+
+        Returns:
+            Извлеченные данные в виде строки
+        """
+        return self.client.generate_response(self.system_prompt, query)
+
+    def extract_json(self, query: str) -> Optional[Dict[str, Any]]:
+        """
+        Args:
+            query: Пользовательский запрос
+
+        Returns:
+            Данные в формате словаря или None при ошибке
+        """
+        response = self.extract_data(query)
+        if not response:
+            return None
+
         try:
-            response = self.ai_client.client.chat.completions.create(
-                model=self.ai_client.model,
-                messages=[
-                    {"role": "system", "content": self.system_prompt},
-                    {"role": "user", "content": question}
-                ],
-                temperature=0.2,
-                timeout=120
-            )
-            if response.choices and response.choices[0].message.content:
-                return response.choices[0].message.content.strip()
-            return None
-        except Exception as e:
-            print(f"ComponentModel error: {e}")
-            return None
+            # Пробуем распарсить JSON
+            if response.strip().startswith('{') and response.strip().endswith('}'):
+                return json.loads(response)
+        except json.JSONDecodeError:
+            pass
+
+        return {"raw_response": response}
 
 
-class Classificator:
+class ComponentClassifier:
     def __init__(self):
-        self.ai_client = AIClient()
-        from ai.promts.component_prompts import CLASSIFICATION
-        self.prompt = CLASSIFICATION
+        self.client = OpenRouterClient()
 
-    def classification(self, question):
-        try:
-            response = self.ai_client.client.chat.completions.create(
-                model=self.ai_client.model,
-                messages=[
-                    {"role": "system", "content": self.prompt},
-                    {"role": "user", "content": question}
-                ],
-                temperature=0.2,
-                timeout=120
-            )
-            if response.choices and response.choices[0].message.content:
-                return str(response.choices[0].message.content.strip())
-            return None
-        except Exception as e:
-            print(f"Classificator error: {e}")
-            return None
+    def classify(self, query: str) -> Optional[ComponentType]:
+        """
+        Args:
+            query: Пользовательский запрос
+
+        Returns:
+            Тип компонента или None при ошибке
+        """
+        from ai.promts.classification_prompt import CLASSIFICATION_PROMPT
+
+        response = self.client.generate_response(
+            system_prompt=CLASSIFICATION_PROMPT,
+            user_query=query
+        )
+
+        if response:
+            try:
+                return ComponentType(response.lower().strip())
+            except ValueError:
+                print(f"Неизвестный тип компонента: {response}")
+
+        return None

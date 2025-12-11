@@ -1,8 +1,6 @@
 import pandas as pd
 import os
 
-from urllib3.filepost import writer
-
 
 class ExcelWriter:
     def __init__(self, filename="results.xlsx"):
