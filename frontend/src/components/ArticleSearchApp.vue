@@ -40,7 +40,9 @@
       <section v-if="foundArticles.length > 0" class="results">
         <div class="table-header-container">
           <h3>Найденные артикулы ({{ foundArticles.length }}):</h3>
-          <button class="btn btn-excel">скачать .xlsx</button>
+          
+          <button @click="saveExcel" class="btn btn-excel">скачать .xlsx</button>
+        
         </div>
         
         <div class="table-container">
@@ -84,7 +86,8 @@
     isExpanded,
     findArticles,
     clearInput,
-    toggleInstructions
+    toggleInstructions,
+    saveExcel
   } = useArticles()
 
 </script>

@@ -7,9 +7,12 @@ export function useArticles() {
   const searchPerformed = ref(false)
   const isExpanded = ref(false)
 
+  const message = ref('')
+
+
   // Функция поиска артикулов
   const findArticles = async () => {
-    if (!inputText.value.trim()) {
+    if (!inputText.value) {
       alert('Введите текст')
       return
     }
@@ -51,6 +54,22 @@ export function useArticles() {
     isExpanded.value = !isExpanded.value
   }
 
+  const saveExcel = async() =>{
+    try{
+      const responce = await fetch('http://127.0.0.1:5000/api/health')
+      if (!responce.ok) {
+        throw new Error(`HTTP error! status: ${responce.status}`)
+      }
+      const data = await responce.json()
+      console.log(data)
+      }catch(data){
+        console.log('Ошибка')
+      }
+      
+    }
+  
+
+
   // Возвращаем все реактивные данные и функции
   return {
     // Данные
@@ -62,6 +81,8 @@ export function useArticles() {
     // Методы
     findArticles,
     clearInput,
-    toggleInstructions
+    toggleInstructions,
+    saveExcel
+    
   }
 }

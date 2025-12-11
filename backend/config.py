@@ -12,7 +12,6 @@ class Config:
     SUPABASE_PASSWORD = os.environ.get('SUPABASE_PASSWORD')
     SUPABASE_PORT = os.environ.get('SUPABASE_PORT')
 
-
     #Cryptography
     CRYPTO_SECRET_KEY = os.environ.get('CRYPTO_SECRET_KEY')
 
@@ -22,7 +21,6 @@ class Config:
 
 class DevelopmentConfig(Config):
     DEBUG = True
-
 
 class ProductionConfig(Config):
     DEBUG = False
