@@ -1,35 +1,24 @@
-
-from typing import TypedDict, Optional, Literal, Union
+from backend.data.types.types import ArmatureType, ComponentType
+from typing import  Optional
 from dataclasses import dataclass
-from enum import Enum
-
-
-class ComponentType(str, Enum):
-    FITTINGS = "fittings"
-    ADAPTERS = "adapters"
-    PLUGS = "plugs"
-    ADAPTER_TEE = "adapter-tee"
-    BANJO = "banjo"
-    BANJO_BOLT = "banjo-bolt"
-    BRS = "brs"
-    COUPLING = "coupling"
-
 
 class ArmatureType(str, Enum):
     NUT = "гайка"
     UNION = "штуцер"
     CONICAL_UNION = "штуцер конусный"
 
+STANDARD_DY_VALUES = [4, 5, 6, 8, 10, 12, 16, 20, 25, 32, 38, 50]
 
+'''
 @dataclass
 class BaseComponent:
     component_type: ComponentType
     original_query: str
     timestamp: str
-
+'''
 
 @dataclass
-class FittingData:
+class FittingDTO:
     standard: str
     Dy: Optional[int] = None
     thread: Optional[str] = None
@@ -48,7 +37,7 @@ class FittingData:
 
 
 @dataclass
-class AdapterData:
+class AdapterDTO:
     standard_1: str
     standard_2: str
     thread_1: str
@@ -60,7 +49,7 @@ class AdapterData:
 
 
 @dataclass
-class PlugData:
+class PlugDTO:
     standard: str
     thread_type: str
     thread: str
@@ -69,7 +58,7 @@ class PlugData:
 
 
 @dataclass
-class AdapterTeeData:
+class AdapterTeeDTO:
     standard_1: str
     standard_2: str
     standard_3: str
@@ -81,5 +70,3 @@ class AdapterTeeData:
     armature_3: Optional[ArmatureType] = None
 
 
-
-STANDARD_DY_VALUES = [4, 5, 6, 8, 10, 12, 16, 20, 25, 32, 38, 50]

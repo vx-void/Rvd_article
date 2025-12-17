@@ -1,7 +1,6 @@
-import json
 from typing import Optional, Dict, Any
 from ai.providers.openrouter_client import ComponentModel, ComponentClassifier
-from ai.models.types import ComponentType
+from backend.data.types.types import ComponentType
 from ai.promts.component_prompts import get_prompt_for_component
 
 

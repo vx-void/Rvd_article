@@ -1,4 +1,4 @@
-from ai.models.types import ComponentType
+from backend.data.types.types import ComponentType
 
 JSON_FORMAT_INSTRUCTION = """
 Верни результат В СТРОГОМ ФОРМАТЕ JSON.
