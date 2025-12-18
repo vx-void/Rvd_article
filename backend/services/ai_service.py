@@ -1,7 +1,6 @@
-import json
 from datetime import datetime
-from typing import Dict, Any, List
-from ai.processing.extractors import extract_component_info
+from typing import Dict, Any
+from hydro_find.ai.extractors import extract_component_info
 from backend.data.models.components import FittingDTO
 from backend.data.repositories.fitting import FittingRepository
 from backend.data.database.supabase_client import SupabaseClientModule

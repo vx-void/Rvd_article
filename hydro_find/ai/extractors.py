@@ -1,7 +1,7 @@
 from typing import Optional, Dict, Any
-from ai.providers.openrouter_client import ComponentModel, ComponentClassifier
+from hydro_find.ai.openrouter_client import ComponentModel, ComponentClassifier
 from backend.data.types.types import ComponentType
-from ai.promts.component_prompts import get_prompt_for_component
+from hydro_find.ai.promts.component_prompts import get_prompt_for_component
 
 
 class ComponentExtractor:

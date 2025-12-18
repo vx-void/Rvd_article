@@ -112,7 +112,7 @@ class ComponentClassifier:
         Returns:
             Тип компонента или None при ошибке
         """
-        from ai.promts.classification_prompt import CLASSIFICATION_PROMPT
+        from hydro_find.ai.promts.classification_prompt import CLASSIFICATION_PROMPT
 
         response = self.client.generate_response(
             system_prompt=CLASSIFICATION_PROMPT,
