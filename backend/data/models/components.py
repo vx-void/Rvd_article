@@ -1,4 +1,3 @@
-from backend.data.types.types import ArmatureType, ComponentType
 from typing import  Optional
 from dataclasses import dataclass
 

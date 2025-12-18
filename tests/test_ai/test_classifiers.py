@@ -1,9 +1,8 @@
 # tests/test_ai/test_classifiers.py
 
-import pytest
 from unittest.mock import patch
 from hydro_find.ai.classifiers import hydrofind
-from backend.data.types.types import ComponentType
+from hydro_find.ai.models.types import ComponentType
 
 
 @patch("hydro_find.ai.classifiers.ComponentClassifier")

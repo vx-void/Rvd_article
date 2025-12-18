@@ -1,4 +1,4 @@
-from backend.data.types.types import ComponentType
+from hydro_find.ai.models.types import ComponentType
 
 JSON_FORMAT_INSTRUCTION = """
 Верни результат В СТРОГОМ ФОРМАТЕ JSON.

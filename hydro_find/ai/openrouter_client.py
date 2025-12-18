@@ -4,7 +4,7 @@ from typing import Optional, Any, Dict
 from openai import OpenAI
 from dotenv import load_dotenv
 
-from backend.data.types.types import ComponentType
+from hydro_find.ai.models.types import ComponentType
 
 load_dotenv()
 

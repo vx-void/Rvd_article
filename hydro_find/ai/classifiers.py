@@ -2,7 +2,7 @@
 
 from typing import Optional
 from hydro_find.ai.openrouter_client import ComponentClassifier
-from backend.data.types.types import ComponentType  # или from hydro_find.models.types import ComponentType
+from hydro_find.ai.models.types import ComponentType  # или from hydro_find.models.types import ComponentType
 
 
 def hydrofind(user_query: str) -> Optional[ComponentType]:
