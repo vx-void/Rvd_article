@@ -4,11 +4,10 @@ import json
 from typing import Optional, Dict, Any
 from openai import OpenAI
 from hydro_find.ai.models.ai_models import get_api_key, get_default_model
-from hydro_find.ai.prompts.classification_prompt import CLASSIFICATION_PROMPT
 
 
 class OpenRouterClient:
-    """Клиент для работы с OpenRouter API."""
+    """Клиент для безопасного взаимодействия с OpenRouter API."""
 
     def __init__(self):
         self.api_key = get_api_key()
@@ -30,7 +29,7 @@ class OpenRouterClient:
         temperature: float = 0.2,
         timeout: int = 120
     ) -> Optional[str]:
-        """Выполняет запрос к модели и возвращает текстовый ответ."""
+        """Выполняет запрос к модели и возвращает чистый текстовый ответ."""
         try:
             response = self.client.chat.completions.create(
                 model=self.model,
@@ -49,36 +48,48 @@ class OpenRouterClient:
 
 
 class ComponentClassifier:
-    """Классификатор типа гидравлического компонента."""
+    """Классификатор типа компонента (возвращает строку: 'fittings', 'adapters', и т.д.)."""
 
     def __init__(self):
         self.client = OpenRouterClient()
 
     def classify(self, query: str) -> Optional[str]:
-        """Возвращает строку: 'fittings', 'adapters', и т.д."""
-        response = self.client.generate_response(CLASSIFICATION_PROMPT, query)
+        """Возвращает нормализованную строку типа компонента или None."""
+        from hydro_find.prompts import get_preprocessing_prompt
+        # Используем промпт классификации (он возвращает plain text, не JSON)
+        classification_prompt = get_preprocessing_prompt("classify")  # ← нужно добавить!
+        response = self.client.generate_response(classification_prompt, query)
         if response:
-            return response.lower().strip().strip('"\'')
+            raw = response.lower().strip().strip('"\'')
+            # Поддерживаем только известные типы
+            allowed = {"fittings", "adapters", "plugs", "adapter-tee", "banjo", "banjo-bolt", "brs", "coupling"}
+            return raw if raw in allowed else None
         return None
 
 
 class ComponentModel:
-    """Модель для извлечения структурированных параметров по промпту."""
+    """Модель для извлечения структурированных данных по заданному промпту."""
 
     def __init__(self, system_prompt: str):
         self.client = OpenRouterClient()
-        self.system_prompt = system_prompt
+        self.system_prompt = system_prompt  # ← сохраняем для использования в extract_json
 
     def extract_json(self, query: str) -> Optional[Dict[str, Any]]:
-        """Извлекает JSON или возвращает {'raw_response': ...}."""
-        response = self.client.generate_response(self.system_prompt, query)
-        if not response:
+        """
+        Запрашивает у модели JSON и пытается его распарсить.
+        При ошибке возвращает {"raw_response": ...}.
+        """
+        response_text = self.client.generate_response(self.system_prompt, query)
+        if not response_text:
             return None
 
         try:
-            if response.strip().startswith('{') and response.strip().endswith('}'):
-                return json.loads(response)
+            # Проверяем, что строка похожа на JSON
+            stripped = response_text.strip()
+            if stripped.startswith('{') and stripped.endswith('}'):
+                return json.loads(stripped)
         except json.JSONDecodeError:
             pass
 
-        return {"raw_response": response}
+        # Fallback: возвращаем как есть
+        return {"raw_response": response_text}
