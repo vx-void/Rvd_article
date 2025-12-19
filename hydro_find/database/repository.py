@@ -1,0 +1,30 @@
+# hydro_find/database/repository.py
+
+from typing import List, Dict, Any
+from sqlalchemy.orm import Session
+from .connection import DatabaseConnection
+from .models import CATEGORY_TO_MODEL
+from .query_builder import ComponentQueryBuilder
+
+class ComponentRepository:
+    def __init__(self, db: DatabaseConnection):
+        self._db = db
+
+    def search(self, params: Dict[str, Any]) -> List[Dict[str, Any]]:
+        """
+        Ищет компоненты в БД по нормализованным параметрам от ИИ.
+        Возвращает список словарей с данными.
+        """
+        category = params.get("component_type")
+        model_class = CATEGORY_TO_MODEL.get(category)
+        if not model_class:
+            return []
+
+        session = self._db.get_session()
+        try:
+            query = session.query(model_class)
+            builder = ComponentQueryBuilder(query, params)
+            results = builder.build().limit(10).all()
+            return [item.to_dict() for item in results]
+        finally:
+            session.close()
