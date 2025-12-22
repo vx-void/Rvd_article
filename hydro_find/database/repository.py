@@ -11,10 +11,6 @@ class ComponentRepository:
         self._db = db
 
     def search(self, params: Dict[str, Any]) -> List[Dict[str, Any]]:
-        """
-        Ищет компоненты в БД по нормализованным параметрам от ИИ.
-        Возвращает список словарей с данными.
-        """
         category = params.get("component_type")
         model_class = CATEGORY_TO_MODEL.get(category)
         if not model_class:
