@@ -2,9 +2,9 @@ import pandas as pd
 import os
 
 
-class ExcelWriter:
+class ExcelService:
     def __init__(self, filename="results.xlsx"):
-        self.filename = filename
+        self._filename = filename
 
     def write(self, query: str, name: str, article: str, quantity: int = 1):
         """
@@ -22,16 +22,16 @@ class ExcelWriter:
         }
         df = pd.DataFrame(data)
 
-        if os.path.exists(self.filename):
-            existing_df = pd.read_excel(self.filename)
+        if os.path.exists(self._filename):
+            existing_df = pd.read_excel(self._filename)
             result_df = pd.concat([existing_df, df], ignore_index=True)
         else:
             result_df = df
 
-        result_df.to_excel(self.filename, index=False)
-        return self.filename
+        result_df.to_excel(self._filename, index=False)
+        return self._filename
 
 if __name__ == '__main__':
-    writer = ExcelWriter()
+    writer = ExcelService()
     writer.write('Фитинг 234ыва', '123-ddd', '12-33-44')
     writer.write('адаптер 324234dfdfd', '333-dfsfs', '45-67-89', 2)
