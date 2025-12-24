@@ -1,7 +1,7 @@
 # hydro_find/database/repository.py
 
 from typing import List, Dict, Any
-from sqlalchemy.orm import Session
+
 from .connection import DatabaseConnection
 from .models import CATEGORY_TO_MODEL
 from .query_builder import ComponentQueryBuilder

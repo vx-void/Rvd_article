@@ -1,10 +1,19 @@
 import pandas as pd
 import os
+from datetime import datetime
 
 
 class ExcelService:
-    def __init__(self, filename="results.xlsx"):
-        self._filename = filename
+    def __init__(self, filename=None):
+        if filename:
+            self._filename = filename
+        else:
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            self._filename = f"results_{timestamp}.xlsx"
+
+    @property
+    def filename(self):
+        return self._filename
 
     def write(self, query: str, name: str, article: str, quantity: int = 1):
         """
@@ -30,8 +39,3 @@ class ExcelService:
 
         result_df.to_excel(self._filename, index=False)
         return self._filename
-
-if __name__ == '__main__':
-    writer = ExcelService()
-    writer.write('Фитинг 234ыва', '123-ddd', '12-33-44')
-    writer.write('адаптер 324234dfdfd', '333-dfsfs', '45-67-89', 2)

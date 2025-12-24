@@ -5,71 +5,30 @@
     </header>
     
     <main class="main-content">
-      <section class="instruction-container">
-        <div class="instructions" @click="toggleInstructions">
-          <h2 class="instruction-title">Инструкция</h2>
-          <span class="toggle-icon">{{ isExpanded ? '▼' : '▶' }}</span>
-        </div>
-        <div v-if="isExpanded" class="instruction-content">
-          <ul class="instruction-list">
-            <li>Вставьте текст в поле ввода ниже</li>
-            <li>Нажмите кнопку "Найти артикулы" для поиска</li>
-            <li>Используйте "Очистить Ввод" для очистки поля</li>
-            <li>Найденные артикулы будут отображены в списке</li>
-          </ul>
-        </div>
-      </section>
+      <InstructionsPanel 
+        :is-expanded="isExpanded"
+        @toggle="toggleInstructions"
+      />
       
-      <section class="input-section">
-        <textarea 
-          v-model="inputText"
-          name="inputText" 
-          id="inputText"
-          class="input-text"
-          placeholder="Вставьте ваш текст..."
-          rows="10">
-        </textarea>
-      </section>
+      <SearchForm 
+        :input-text="inputText"
+        @search="findArticles"
+        @clear="clearInput"
+      />
       
-      <section class="button-area">
-        <button @click="findArticles" class="btn btn-primary">Найти артикулы</button>
-        <button @click="clearInput" class="btn btn-secondary">Очистить Ввод</button>
-      </section>
+      <Loader 
+        v-if="loading"
+        :message="loadingMessage"
+      />
       
-      <!-- Результаты поиска -->
       <section v-if="foundArticles.length > 0" class="results">
-        <div class="table-header-container">
-          <h3>Найденные артикулы ({{ foundArticles.length }}):</h3>
-          
-          <button @click="saveExcel" class="btn btn-excel">скачать .xlsx</button>
-        
-        </div>
-        
-        <div class="table-container">
-          <table class="articles-table">
-            <thead>
-              <tr>
-                <th class="col-1">Запрос</th>
-                <th class="col-2">Наименование</th>
-                <th class="col-3">Артикул</th>
-                <th class="col-4">Количество</th>
-              </tr>
-            </thead>
-            <tbody>
-
-              <!--вывести Результаты из back-end  -->
-              <tr v-for="article in foundArticles" class="article-row">
-                <td class="cell">{{ article}}</td>
-                <td class="cell">Данные 2</td>
-                <td class="cell">Данные 3</td>
-                <td class="cell">Данные 4</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <ResultsTable :found-articles="foundArticles">
+          <template #export-button>
+            <ExportButton @export="saveExcel" />
+          </template>
+        </ResultsTable>
       </section>
       
-      <!-- Сообщение если ничего не найдено -->
       <div v-if="searchPerformed && foundArticles.length === 0" class="no-results">
         <p>Артикулы не найдены. Попробуйте другой текст.</p>
       </div>
@@ -78,20 +37,57 @@
 </template>
 
 <script setup>
-  import { useArticles } from '@/composables/useArticles.js'
-  const {
-    inputText,
-    foundArticles,
-    searchPerformed,
-    isExpanded,
-    findArticles,
-    clearInput,
-    toggleInstructions,
-    saveExcel
-  } = useArticles()
+import { ref } from 'vue'
+import InstructionsPanel from './InstructionsPanel.vue'
+import SearchForm from './SearchForm.vue'
+import ResultsTable from './ResultsTable.vue'
+import Loader from './Loader.vue'
+import ExportButton from './ExportButton.vue'
 
+// Состояние
+const inputText = ref('')
+const foundArticles = ref([])
+const searchPerformed = ref(false)
+const isExpanded = ref(false)
+const loading = ref(false)
+const loadingMessage = ref('Идет поиск артикулов...')
+
+// Методы
+const findArticles = async () => {
+  if (!inputText.value.trim()) return
+  
+  searchPerformed.value = true
+  loading.value = true
+  
+  try {
+    // TODO: Реализовать вызов API
+    // const response = await searchApi(inputText.value)
+    // foundArticles.value = response.data
+    
+    // Временная заглушка
+    setTimeout(() => {
+      foundArticles.value = [inputText.value, 'Пример артикула 2', 'Пример артикула 3']
+      loading.value = false
+    }, 1500)
+    
+  } catch (error) {
+    console.error('Ошибка поиска:', error)
+    loading.value = false
+  }
+}
+
+const clearInput = () => {
+  inputText.value = ''
+  foundArticles.value = []
+  searchPerformed.value = false
+}
+
+const toggleInstructions = () => {
+  isExpanded.value = !isExpanded.value
+}
+
+const saveExcel = () => {
+  // TODO: Реализовать экспорт в Excel через API
+  console.log('Экспорт в Excel:', foundArticles.value)
+}
 </script>
-
-<style scoped>
-
-</style>
