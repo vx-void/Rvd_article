@@ -1,0 +1,42 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+  # === Redis (кэш, сессии, блокировки и т.д.) ===
+  redis:
+    image: redis:7-alpine
+    container_name: app_redis
+    ports:
+      - "6379:6379"
+    command: redis-server --save "" --appendonly no --maxmemory 128mb --maxmemory-policy allkeys-lru
+
+
+  # === RabbitMQ (брокер сообщений) ===
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    container_name: app_rabbitmq
+    ports:
+      - "5672:5672"      # AMQP протокол
+      - "15672:15672"    # Веб-интерфейс управления
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    # volumes:
+    #   - ./rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf  # если нужна кастомизация
+
+  # === Ваш бэкенд (Flask) ===
+  backend:
+    build: ./backend
+    depends_on:
+      - redis
+      - rabbitmq
+    environment:
+      REDIS_URL: redis://redis:6379/0
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672//
+    # ... остальные настройки (ports, volumes и т.д.)
+
+  # === Фронтенд (Vue.js) ===
+  frontend:
+    build: ./frontend
+    ports:
+      - "80:80"
