@@ -2,6 +2,7 @@ import pika
 import json
 import os
 import logging
+import psycopg2
 from .worker import RMQWorker
 
 logging.basicConfig(level=logging.INFO)

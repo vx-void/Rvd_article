@@ -69,21 +69,43 @@ const startSearch = async () => {
   clearAll()
   searchPerformed.value = true
   loading.value = true
+  loadingMessage.value = 'Создание задачи...'
 
   try {
+    // Отправляем запрос
     const response = await fetch('/api/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ query })
     })
 
-    // 🔑 Читаем тело ОДИН РАЗ
-    const result = await response.json()
+    // 🔍 ВЫВОДИМ ВСЕ ДАННЫЕ ОТВЕТА В КОНСОЛЬ
+    console.group('🔍 Ответ от /api/')
+    console.log('Статус:', response.status)
+    console.log('Статус-текст:', response.statusText)
+    console.log('Заголовки:', Object.fromEntries(response.headers.entries()))
+    
+    // Читаем тело один раз
+    const textBody = await response.text()
+    console.log('Тело ответа (raw):', textBody)
 
+    let result
+    try {
+      result = JSON.parse(textBody)
+      console.log('Тело ответа (parsed):', result)
+    } catch (parseError) {
+      console.warn('❌ Не удалось распарсить JSON:', parseError)
+      result = {}
+    }
+    console.groupEnd()
+
+    // Проверяем статус
     if (!response.ok) {
-      throw new Error(result.message || `Ошибка ${response.status}`)
+      const message = result.message || `Ошибка ${response.status}`
+      throw new Error(message)
     }
 
+    // Проверяем наличие task_id
     if (!result.task_id) {
       throw new Error('Бэкенд не вернул task_id')
     }
@@ -98,7 +120,7 @@ const startSearch = async () => {
       startPolling()
     }
   } catch (error) {
-    console.error('Ошибка поиска:', error)
+    console.error('🔥 Ошибка в startSearch:', error)
     alert(`Не удалось запустить поиск: ${error.message}`)
     loading.value = false
   }

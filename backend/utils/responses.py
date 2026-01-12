@@ -75,7 +75,6 @@ def success_response(data=None, request_id=None):
     response = SuccessResponse(data, request_id)
     return response.to_response()
 
-
 def error_response(message, status_code=400, request_id=None, details=None):
     """Создание ответа с ошибкой (старый стиль)"""
     response = ErrorResponse(message, status_code, request_id, details)
