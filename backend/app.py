@@ -2,6 +2,7 @@ from flask import Flask
 from flask_cors import CORS
 from .routes.search import search_bp
 import logging
+import os
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -33,7 +34,6 @@ class App:
 
     def _configure_app(self, config_class):
         from .config import Config, DevelopmentConfig, ProductionConfig
-        import os
 
         if config_class:
             self.app.config.from_object(config_class)
@@ -63,7 +63,7 @@ class App:
              supports_credentials=True)
 
     def _register_blueprints(self):
-        # Исправленный путь регистрации
+        # Регистрация blueprint с префиксом /api — ТОЛЬКО ЗДЕСЬ!
         self.app.register_blueprint(search_bp, url_prefix='/api')
 
         @self.app.route('/health')
@@ -95,6 +95,14 @@ class App:
         logger.info(f"Starting HydroFind API on http://{host}:{port}")
         logger.info(f"Environment: {self.app.config.get('ENV', 'production')}")
         logger.info(f"Debug mode: {debug}")
+
+        # === ОПЦИОНАЛЬНО: вывод всех маршрутов для диагностики ===
+        with self.app.app_context():
+            logger.info("=== Registered routes ===")
+            for rule in self.app.url_map.iter_rules():
+                methods = ', '.join(sorted(rule.methods - {'HEAD', 'OPTIONS'}))
+                logger.info(f"{rule.endpoint:30} [{methods}] → {rule.rule}")
+            logger.info("=========================")
 
         self.app.run(
             host=host,

@@ -2,7 +2,8 @@
   <div class="search-form">
     <section class="input-section">
       <textarea 
-        v-model="inputText"
+        :value="inputText"
+        @input="onInput"
         name="inputText" 
         id="inputText"
         class="input-text"
@@ -19,11 +20,15 @@
 </template>
 
 <script setup>
-defineProps({
+const props = defineProps({
   inputText: String
 })
 
-const emit = defineEmits(['search', 'clear'])
+const emit = defineEmits(['update:inputText', 'search', 'clear'])
+
+const onInput = (event) => {
+  emit('update:inputText', event.target.value)
+}
 
 const findArticles = () => emit('search')
 const clearInput = () => emit('clear')

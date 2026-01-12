@@ -22,9 +22,14 @@ class APIResponse:
             result["request_id"] = self.request_id
         return result
 
-    def to_response(self, status_code: int = 200):
-        """Создание Flask Response"""
-        return jsonify(self.to_dict()), status_code
+    def to_response(self):
+        response_body = {
+            "success": True,
+            **self.data  # ← распаковка данных в корень
+        }
+        if self.request_id:
+            response_body["request_id"] = self.request_id
+        return jsonify(response_body), 200
 
 
 class SuccessResponse(APIResponse):

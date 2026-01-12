@@ -56,7 +56,6 @@ def search():
         "message": "Search task created"
     }, request_id=task_id).to_response()
 
-
 @search_bp.route('/task/<task_id>', methods=['GET'])
 def get_task_status(task_id):
     task_status = cache_service.get_task_status(task_id)
@@ -75,15 +74,3 @@ def get_task_status(task_id):
     }, request_id=task_id).to_response()
 
 
-@search_bp.route('/download/<task_id>', methods=['GET'])
-def download_excel(task_id):
-    excel_path = cache_service.get_cached_excel_path(task_id)
-
-    if not excel_path or not os.path.exists(excel_path):
-        return ErrorResponse(f"Excel file for task {task_id} not found", 404).to_response()
-
-    return send_file(
-        excel_path,
-        as_attachment=True,
-        download_name=f"results_{task_id[:8]}.xlsx"
-    )
