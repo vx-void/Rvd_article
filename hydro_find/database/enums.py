@@ -12,6 +12,11 @@ class Standard(IntEnum):
     ORFS = 7
     BANJO = 8
 
+    @classmethod
+    def to_display_name(cls, value: 'Standard') -> str:
+        """Преобразует enum в читаемое имя для отображения"""
+        return value.name
+
 class Thread(IntEnum):
 
     _1_8 = 1       # "1/8"

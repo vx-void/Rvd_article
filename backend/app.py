@@ -66,12 +66,6 @@ class App:
         # Регистрация blueprint с префиксом /api — ТОЛЬКО ЗДЕСЬ!
         self.app.register_blueprint(search_bp, url_prefix='/api')
 
-        @self.app.route('/health')
-        def health_check():
-            from .utils.responses import SuccessResponse
-            response = SuccessResponse({"status": "healthy", "service": "hydro-find"})
-            return response.to_response()
-
     def _register_error_handlers(self):
         @self.app.errorhandler(404)
         def not_found_error(error):
@@ -111,20 +105,13 @@ class App:
             **options
         )
 
-    def create_test_client(self):
-        """Создание тестового клиента"""
-        self.app.config['TESTING'] = True
-        return self.app.test_client()
-
     @property
     def config(self):
         return dict(self.app.config)
 
-
 def create_app(config_class=None, testing=False):
     flask_app = App(config_class=config_class, testing=testing)
     return flask_app.get_app()
-
 
 if __name__ == '__main__':
     app = App()
