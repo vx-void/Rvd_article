@@ -1,4 +1,3 @@
-# backend/utils/responses.py
 from flask import jsonify
 from typing import Any, Optional
 from datetime import datetime
@@ -23,16 +22,12 @@ class APIResponse:
         return result
 
     def to_response(self):
-        response_body = {
-            "success": True,
-            **self.data  # ← распаковка данных в корень
-        }
-        if self.request_id:
-            response_body["request_id"] = self.request_id
-        return jsonify(response_body), 200
+        """Преобразование в Flask response"""
+        return jsonify(self.to_dict()), 200 if self.success else 400
 
 
 class SuccessResponse(APIResponse):
+    """Успешный ответ"""
 
     def __init__(self, data: Any = None, request_id: Optional[str] = None):
         super().__init__(success=True, request_id=request_id)
@@ -41,11 +36,16 @@ class SuccessResponse(APIResponse):
     def to_dict(self) -> dict:
         result = super().to_dict()
         if self.data is not None:
-            result["data"] = self.data
+            if isinstance(self.data, dict):
+                result.update(self.data)
+            else:
+                result["data"] = self.data
         return result
 
 
 class ErrorResponse(APIResponse):
+    """Ответ с ошибкой"""
+
     def __init__(self,
                  message: str,
                  status_code: int = 400,
@@ -60,7 +60,7 @@ class ErrorResponse(APIResponse):
         result = super().to_dict()
         result["error"] = {
             "message": self.message,
-            "details": self.details
+            "details": self.details or {}
         }
         return result
 
@@ -74,6 +74,7 @@ def success_response(data=None, request_id=None):
     """Создание успешного ответа (старый стиль)"""
     response = SuccessResponse(data, request_id)
     return response.to_response()
+
 
 def error_response(message, status_code=400, request_id=None, details=None):
     """Создание ответа с ошибкой (старый стиль)"""
