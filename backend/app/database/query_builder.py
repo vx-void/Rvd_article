@@ -50,7 +50,7 @@ class ComponentQueryBuilder:
             if param_name in params:
                 handler(params[param_name])
 
-        # Булевы флаги
+
         for flag in ['usit', 'o_ring', 'counter_nut', 'locknut']:
             if flag in params and params[flag] is not None:
                 self._apply_boolean_filter(flag, params[flag])
@@ -62,7 +62,7 @@ class ComponentQueryBuilder:
         return self
 
     def _apply_standard_filter(self, standard_value):
-        """Применяет фильтр по стандарту"""
+
         try:
             std_enum = getattr(Standard, standard_value.upper().strip(), None)
             if not std_enum:
@@ -81,13 +81,16 @@ class ComponentQueryBuilder:
             logger.warning(f"Failed to apply standard filter: {e}")
 
     def _apply_boolean_filter(self, field_name, value):
-        """Применяет булев фильтр"""
+
         try:
             if hasattr(self.model, field_name):
                 bool_value = str(value).lower() in ['true', '1', 'yes', 'y']
                 self.query = self.query.filter(getattr(self.model, field_name) == bool_value)
         except Exception as e:
             logger.warning(f"Failed to apply boolean filter {field_name}: {e}")
+
+
+
 
     # ... остальные методы фильтрации ...
 

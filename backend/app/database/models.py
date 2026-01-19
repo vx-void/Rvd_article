@@ -178,8 +178,6 @@ class Coupling(ComponentBase):
             "Dy": self.Dy
         }
 
-
-
 CATEGORY_TO_MODEL = {
     "fittings": Fitting,
     "adapters": Adapter,
