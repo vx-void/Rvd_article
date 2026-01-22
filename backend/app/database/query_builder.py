@@ -62,7 +62,6 @@ class ComponentQueryBuilder:
         return self
 
     def _apply_standard_filter(self, standard_value):
-
         try:
             std_enum = getattr(Standard, standard_value.upper().strip(), None)
             if not std_enum:
