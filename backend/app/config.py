@@ -17,6 +17,7 @@ class Config:
     RABBITMQ_PORT = os.environ.get('RABBITMQ_PORT')
     RABBITMQ_USER = os.environ.get('RABBITMQ_USER')
     RABBITMQ_PASS = os.environ.get('RABBITMQ_PASS')
+    RABBITMQ_VHOST = os.environ.get('RABBITMQ_VHOST')
 
 
     # OpenRouter

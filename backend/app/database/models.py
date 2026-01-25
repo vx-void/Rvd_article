@@ -2,7 +2,7 @@
 
 from sqlalchemy import Column, Integer, String, Boolean, SmallInteger, ForeignKey
 from .connection import Base
-from .enums import Standard, Armature, Angle, Series, Thread
+from .reference import Standard, Armature, Angle, Series, Thread
 
 class ComponentBase(Base):
     __abstract__ = True

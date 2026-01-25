@@ -110,10 +110,7 @@ class App:
 
 
 def create_app(config_class=None, testing=False):
-    """
-    Factory-функция для создания Flask-приложения.
-    Используется, например, для тестирования.
-    """
+
     flask_app_instance = App(config_class=config_class, testing=testing)
     return flask_app_instance.get_app()
 

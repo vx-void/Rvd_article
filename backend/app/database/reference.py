@@ -1,4 +1,4 @@
-# backend/app/database/enums.py
+# backend/app/database/reference.py
 
 from enum import IntEnum
 
@@ -43,8 +43,7 @@ class Thread(IntEnum):
     _9_16 = 20     # "9/16"
     _5_16 = 21     # "5/16"
     _7_16 = 22     # "7/16"
-
-    _3_4_INCH = 23 # "3/4''"
+    _3_4 = 23 # "3/4''"
 
 
     @classmethod
@@ -67,17 +66,18 @@ class Thread(IntEnum):
             "14х1.5": cls.M14_X_1_5,
             "16х1.5": cls.M16_X_1_5,
             "18х1.5": cls.M18_X_1_5,
-            "1,3/16": cls._1_3_16,
-            "1,5/16": cls._1_5_16,
-            "1,5/8": cls._1_5_8,
-            "1,7/8": cls._1_7_8,
-            "2,1/2": cls._2_1_2,
+            "1.3/16": cls._1_3_16,
+            "1.5/16": cls._1_5_16,
+            "1.5/8": cls._1_5_8,
+            "1.7/8": cls._1_7_8,
+            "2.1/2": cls._2_1_2,
             "5/8": cls._5_8,
             "7/8": cls._7_8,
             "9/16": cls._9_16,
             "5/16": cls._5_16,
             "7/16": cls._7_16,
-            "3/4''": cls._3_4_INCH,
+            "3/4''": cls._3_4,
+
         }
         result = mapping.get(value)
         if result is None:

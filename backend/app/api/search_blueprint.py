@@ -17,6 +17,7 @@ def initiate_search():
     if not query:
         return jsonify({'error': 'Query is required'}), 400
 
+
     # 1. Проверяем кэш по MD5-хешу запроса
     query_hash = hashlib.md5(query.encode()).hexdigest()
     cached_result = cache_service.get_from_cache(query_hash)
@@ -28,6 +29,7 @@ def initiate_search():
             'cached': True,
             'result': cached_result['result']
         })
+
 
     # 2. Нет в кэше — создаём новую задачу
     task_id = str(uuid.uuid4())

@@ -40,27 +40,10 @@ class ComponentRepository:
             logger.error(f"Database search error: {e}")
             return []
 
-    def get_by_article(self, category: str, article: str) -> Optional[Dict[str, Any]]:
-        """Получение компонента по артикулу"""
-        model_class = CATEGORY_TO_MODEL.get(category)
-        if not model_class:
-            return None
-
-        try:
-            with self._db.get_session() as session:
-                item = session.query(model_class).filter(
-                    model_class.article == article
-                ).first()
-
-                return self._enrich_component_data(item.to_dict()) if item else None
-
-        except Exception as e:
-            logger.error(f"Error getting component by article: {e}")
-            return None
 
     def _enrich_component_data(self, data: Dict[str, Any]) -> Dict[str, Any]:
         """Добавляет дополнительную информацию к данным компонента"""
         # Можно добавить вычисляемые поля или форматирование
         if 'article' in data:
-            data['article_formatted'] = f"ART-{data['article']}"
+            data['article_formatted'] = f"{data['article']}"
         return data

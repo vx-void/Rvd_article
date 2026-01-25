@@ -38,7 +38,7 @@
 import { ref, onUnmounted } from 'vue'
 import InstructionsPanel from './InstructionsPanel.vue'
 import SearchForm from './SearchForm.vue'
-import BatchResultsTable from './BatchResultsTable.vue'
+//import BatchResultsTable from './BatchResultsTable.vue'
 import Loader from './Loader.vue'
 
 export default {
@@ -47,7 +47,7 @@ export default {
   components: {
     InstructionsPanel,
     SearchForm,
-    BatchResultsTable,
+    //BatchResultsTable,
     Loader
   },
 

@@ -22,16 +22,14 @@ class DatabaseConnection:
     def get_session(self):
         return self._SessionLocal()
 
-    def create_all_tables(self):
-        Base.metadata.create_all(bind=self._engine)
-
     def _get_database_url(self) -> str:
         url = os.getenv("DATABASE_URL")
         if url:
             return url
-        user = os.getenv("DB_USER", "postgres")
-        password = os.getenv("DB_PASSWORD", "password")
-        host = os.getenv("DB_HOST", "localhost")
-        port = os.getenv("DB_PORT", "5432")
-        db_name = os.getenv("DB_NAME", "hydro_db")
+        user = os.getenv("DB_USER")
+        password = os.getenv("DB_PASSWORD")
+        host = os.getenv("DB_HOST")
+        port = os.getenv("DB_PORT")
+        db_name = os.getenv("DB_NAME")
         return f"postgresql://{user}:{password}@{host}:{port}/{db_name}"
+

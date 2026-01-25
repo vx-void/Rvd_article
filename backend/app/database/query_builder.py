@@ -5,7 +5,7 @@ from sqlalchemy import and_, or_
 from sqlalchemy.orm import Query
 import logging
 from .models import Fitting, Adapter, Plug, AdapterTee, Banjo, BRS, Coupling
-from .enums import Standard, Armature, Angle, Series, Thread
+from .reference import Standard, Armature, Angle, Series, Thread
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +20,7 @@ class ComponentQueryBuilder:
             self.model = None
 
     def build(self) -> Query:
-        """Создает запрос с применением всех фильтров"""
+
         try:
             return (
                 self._apply_exact_filters()
