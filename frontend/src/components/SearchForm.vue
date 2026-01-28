@@ -2,8 +2,7 @@
   <div class="search-form">
     <div class="input-container">
       <label for="search-text" class="input-label">
-        Введите текст с запросами гидравлических компонентов
-        <span class="hint">(можно несколько запросов в одном тексте)</span>
+
       </label>
       
       <textarea 
@@ -18,18 +17,8 @@
       ></textarea>
       
       <div class="textarea-footer">
-        <div class="char-count">
-          Символов: {{ localText.length }} / 5000
-        </div>
         <div class="textarea-actions">
-          <button 
-            v-if="localText.length > 0"
-            @click="clearText"
-            class="btn-clear"
-            title="Очистить поле"
-          >
-            ✕ Очистить
-          </button>
+          
         </div>
       </div>
     </div>

@@ -1,3 +1,4 @@
+<!-- ArticleSearchApp.vue -->
 <template>
   <div class="app">
     <header class="header">
@@ -24,8 +25,7 @@
       <BatchResultsTable 
         v-if="batchResults.length > 0"
         :results="batchResults"
-        :downloading="downloadingExcel"
-        @download-excel="downloadExcelFromBackend"
+        :downloading="loading"
       />
 
       <div v-else-if="searchPerformed && !loading" class="no-results">
@@ -34,11 +34,12 @@
     </main>
   </div>
 </template>
+
 <script>
 import { ref, onUnmounted } from 'vue'
 import InstructionsPanel from './InstructionsPanel.vue'
 import SearchForm from './SearchForm.vue'
-//import BatchResultsTable from './BatchResultsTable.vue'
+import BatchResultsTable from './BatchResultsTable.vue'
 import Loader from './Loader.vue'
 
 export default {
@@ -47,7 +48,7 @@ export default {
   components: {
     InstructionsPanel,
     SearchForm,
-    //BatchResultsTable,
+    BatchResultsTable,
     Loader
   },
 
@@ -61,7 +62,6 @@ export default {
     const searchPerformed = ref(false)
     const isExpanded = ref(false)
     const loading = ref(false)
-    const downloadingExcel = ref(false)
     const loadingMessage = ref('Идет поиск компонентов...')
     const currentTaskId = ref(null)
     const pollInterval = ref(null)
@@ -198,180 +198,115 @@ export default {
       }
     }
 
+    // Polling статуса задачи - МАКСИМУМ 5 попыток
+    const startPolling = () => {
+      if (pollInterval.value) {
+        clearInterval(pollInterval.value)
+      }
 
-// Polling статуса задачи - МАКСИМУМ 5 попыток
-const startPolling = () => {
-  if (pollInterval.value) {
-    clearInterval(pollInterval.value)
-  }
+      let attempts = 0
+      const maxAttempts = 5  // ТОЛЬКО 5 ПОПЫТОК!
+      const pollIntervalMs = 5000  // Каждые 5 секунд
 
-  let attempts = 0
-  const maxAttempts = 5  // ТОЛЬКО 5 ПОПЫТОК!
-  const pollIntervalMs = 5000  // Каждые 5 секунд
+      pollInterval.value = setInterval(async () => {
+        attempts++
+        
+        console.log(`Polling попытка ${attempts}/${maxAttempts} для задачи ${currentTaskId.value}`)
+        
+        // Проверка максимального количества попыток
+        if (attempts >= maxAttempts) {
+          stopPolling()
+          loading.value = false
+          
+          // Пытаемся отменить задачу на сервере
+          try {
+            await fetch(`${API_BASE_URL}/api/task/${currentTaskId.value}/cancel`, {
+              method: 'POST'
+            }).catch(() => {})  // Игнорируем ошибки
+          } catch (e) {}
+          
+          alert('Сервер не обработал задачу за 25 секунд. Возможно worker не запущен. Попробуйте позже.')
+          return
+        }
 
-  pollInterval.value = setInterval(async () => {
-    attempts++
-    
-    console.log(`Polling попытка ${attempts}/${maxAttempts} для задачи ${currentTaskId.value}`)
-    
-    // Проверка максимального количества попыток
-    if (attempts >= maxAttempts) {
-      stopPolling()
-      loading.value = false
-      
-      // Пытаемся отменить задачу на сервере
-      try {
-        await fetch(`${API_BASE_URL}/api/task/${currentTaskId.value}/cancel`, {
-          method: 'POST'
-        }).catch(() => {})  // Игнорируем ошибки
-      } catch (e) {}
-      
-      alert('Сервер не обработал задачу за 25 секунд. Возможно worker не запущен. Попробуйте позже.')
-      return
+        try {
+          const response = await fetch(`${API_BASE_URL}/api/task/${currentTaskId.value}`)
+          
+          if (!response.ok) {
+            throw new Error(`HTTP error: ${response.status}`)
+          }
+
+          const result = await response.json()
+          
+          console.log('Polling результат:', result)
+          
+          if (!result.success) {
+            throw new Error('Ошибка получения статуса')
+          }
+
+          const responseData = result.data || result
+          const status = responseData.status
+          const taskResult = responseData.result
+          
+          if (status === 'completed') {
+            // Задача завершена успешно
+            stopPolling()
+            if (taskResult && taskResult.results) {
+              batchResults.value = taskResult.results
+            } else if (taskResult && taskResult.matches) {
+              batchResults.value = [{
+                original_query: inputText.value.trim(),
+                matches: taskResult.matches,
+                quantity: 1
+              }]
+            }
+            loading.value = false
+            loadingMessage.value = ''
+            
+          } else if (status === 'error' || status === 'failed' || status === 'timeout') {
+            // Задача завершилась с ошибкой
+            stopPolling()
+            loading.value = false
+            const errorMsg = (taskResult && taskResult.error) 
+              ? taskResult.error 
+              : (responseData.error && responseData.error.message)
+                ? responseData.error.message
+                : 'Неизвестная ошибка'
+            alert(`Ошибка обработки: ${errorMsg}`)
+            
+          } else if (status === 'partial') {
+            // Частичный результат
+            stopPolling()
+            if (taskResult && taskResult.results) {
+              batchResults.value = taskResult.results
+            }
+            loading.value = false
+            loadingMessage.value = ''
+            alert('Внимание: некоторые компоненты не были найдены из-за ошибки БД')
+            
+          } else if (status === 'cached') {
+            // Результат из кэша
+            stopPolling()
+            if (taskResult && taskResult.results) {
+              batchResults.value = taskResult.results
+            }
+            loading.value = false
+            loadingMessage.value = ''
+            
+          }
+          // status === 'processing' - продолжаем ждать
+
+        } catch (error) {
+          console.error('Ошибка опроса статуса:', error)
+          // Не останавливаем polling при временных ошибках
+        }
+      }, pollIntervalMs)
     }
-
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/task/${currentTaskId.value}`)
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error: ${response.status}`)
-      }
-
-      const result = await response.json()
-      
-      console.log('Polling результат:', result)
-      
-      if (!result.success) {
-        throw new Error('Ошибка получения статуса')
-      }
-
-      const responseData = result.data || result
-      const status = responseData.status
-      const taskResult = responseData.result
-      
-      if (status === 'completed') {
-        // Задача завершена успешно
-        stopPolling()
-        if (taskResult && taskResult.results) {
-          batchResults.value = taskResult.results
-        } else if (taskResult && taskResult.matches) {
-          batchResults.value = [{
-            original_query: inputText.value.trim(),
-            matches: taskResult.matches,
-            quantity: 1
-          }]
-        }
-        loading.value = false
-        loadingMessage.value = ''
-        
-      } else if (status === 'error' || status === 'failed' || status === 'timeout') {
-        // Задача завершилась с ошибкой
-        stopPolling()
-        loading.value = false
-        const errorMsg = (taskResult && taskResult.error) 
-          ? taskResult.error 
-          : (responseData.error && responseData.error.message)
-            ? responseData.error.message
-            : 'Неизвестная ошибка'
-        alert(`Ошибка обработки: ${errorMsg}`)
-        
-      } else if (status === 'partial') {
-        // Частичный результат
-        stopPolling()
-        if (taskResult && taskResult.results) {
-          batchResults.value = taskResult.results
-        }
-        loading.value = false
-        loadingMessage.value = ''
-        alert('Внимание: некоторые компоненты не были найдены из-за ошибки БД')
-        
-      } else if (status === 'cached') {
-        // Результат из кэша
-        stopPolling()
-        if (taskResult && taskResult.results) {
-          batchResults.value = taskResult.results
-        }
-        loading.value = false
-        loadingMessage.value = ''
-        
-      }
-      // status === 'processing' - продолжаем ждать
-
-    } catch (error) {
-      console.error('Ошибка опроса статуса:', error)
-      // Не останавливаем polling при временных ошибках
-    }
-  }, pollIntervalMs)
-}
+    
     const stopPolling = () => {
       if (pollInterval.value) {
         clearInterval(pollInterval.value)
         pollInterval.value = null
-      }
-    }
-
-    // Скачивание Excel с бекенда
-    const downloadExcelFromBackend = async () => {
-      if (!currentTaskId.value) {
-        alert('Нет активной задачи для экспорта')
-        return
-      }
-
-      if (batchResults.value.length === 0) {
-        alert('Нет данных для экспорта')
-        return
-      }
-
-      downloadingExcel.value = true
-
-      try {
-        // Запрашиваем Excel файл с бекенда
-        const response = await fetch(`${API_BASE_URL}/api/download/${currentTaskId.value}`, {
-          method: 'GET',
-          headers: {
-            'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-          }
-        })
-
-        if (!response.ok) {
-          const errorText = await response.text()
-          throw new Error(`Ошибка сервера: ${response.status}. ${errorText}`)
-        }
-
-        // Получаем бинарные данные файла
-        const blob = await response.blob()
-        
-        // Создаем URL для скачивания
-        const url = window.URL.createObjectURL(blob)
-        const link = document.createElement('a')
-        
-        // Получаем имя файла из заголовков или генерируем
-        const contentDisposition = response.headers.get('Content-Disposition')
-        let filename = `результаты_поиска_${currentTaskId.value.slice(0, 8)}.xlsx`
-        
-        if (contentDisposition) {
-          const filenameMatch = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/)
-          if (filenameMatch && filenameMatch[1]) {
-            filename = decodeURIComponent(filenameMatch[1].replace(/['"]/g, ''))
-          }
-        }
-        
-        link.href = url
-        link.download = filename
-        document.body.appendChild(link)
-        link.click()
-        
-        // Очистка
-        setTimeout(() => {
-          window.URL.revokeObjectURL(url)
-          document.body.removeChild(link)
-        }, 100)
-
-      } catch (error) {
-        console.error('Ошибка скачивания Excel:', error)
-        alert(`Не удалось скачать Excel файл: ${error.message}`)
-      } finally {
-        downloadingExcel.value = false
       }
     }
 
@@ -402,12 +337,10 @@ const startPolling = () => {
       searchPerformed,
       isExpanded,
       loading,
-      downloadingExcel,
       loadingMessage,
       
       // Методы
       startBatchSearch,
-      downloadExcelFromBackend,
       clearAll,
       toggleInstructions
     }
