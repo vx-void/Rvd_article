@@ -8,7 +8,7 @@ import time
 
 from backend.app.services.ai_service import AIService
 from backend.app.services.db_service import DBService
-from backend.app.services import excel_service, cache_service
+from backend.app.services import excel_service
 from backend.app.config import Config
 
 
