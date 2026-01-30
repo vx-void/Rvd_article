@@ -67,16 +67,3 @@ class ErrorResponse(APIResponse):
     def to_response(self):
         """Переопределение с учетом status_code"""
         return jsonify(self.to_dict()), self.status_code
-
-
-# Функции для обратной совместимости
-def success_response(data=None, request_id=None):
-    """Создание успешного ответа (старый стиль)"""
-    response = SuccessResponse(data, request_id)
-    return response.to_response()
-
-
-def error_response(message, status_code=400, request_id=None, details=None):
-    """Создание ответа с ошибкой (старый стиль)"""
-    response = ErrorResponse(message, status_code, request_id, details)
-    return response.to_response()

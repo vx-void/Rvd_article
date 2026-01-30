@@ -1,7 +1,7 @@
 # backend/services/db_service.py
 
-from backend.app.database.connection import DatabaseConnection
-from backend.app.database.repository import ComponentRepository
+from backend.database.connection import DatabaseConnection
+from backend.database.repository import ComponentRepository
 
 COMPONENT_TYPE_MAPPING ={
     'фитинг' : 'fittings',

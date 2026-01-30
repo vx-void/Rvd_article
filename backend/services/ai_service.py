@@ -1,6 +1,6 @@
 # backend/services/ai_service.py
 
-from backend.app.ai.service import AIProcessingService
+from backend.ai.service import AIProcessingService
 
 class AIService:
     def __init__(self):

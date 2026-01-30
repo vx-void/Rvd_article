@@ -4,13 +4,10 @@ import pika
 import json
 import logging
 # from app.config import Config # Не импортируем сразу
-import time
 
-from backend.app.services.ai_service import AIService
-from backend.app.services.db_service import DBService
-from backend.app.services import excel_service
-from backend.app.config import Config
-
+from backend.services.ai_service import AIService
+from backend.services.db_service import DBService
+from backend.services import excel_service
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -22,7 +19,7 @@ channel = None
 def setup_rabbitmq_connection():
     """Устанавливает подключение к RabbitMQ для воркера."""
     global connection, channel
-    from backend.app.config import Config
+    from backend.config import Config
 
     #rabbitmq_url = f"amqp://{Config.RABBITMQ_USER}:{Config.RABBITMQ_PASS}@{Config.RABBITMQ_HOST}:{Config.RABBITMQ_PORT}/%2F"
     rabbitmq_url = f"amqp://{Config.RABBITMQ_USER}:{Config.RABBITMQ_PASS}@{Config.RABBITMQ_HOST}:{Config.RABBITMQ_PORT}/{Config.RABBITMQ_VHOST}"

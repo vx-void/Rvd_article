@@ -20,7 +20,7 @@ class RMQProducer:
             return # Подключение уже активно
 
     # Импортируем Config *внутри функции*, чтобы убедиться, что она инициализирована
-        from backend.app.config import Config
+        from backend.config import Config
 
     # Формируем URL для pika
     # Читаем параметры из Config

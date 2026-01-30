@@ -2,8 +2,8 @@ import logging
 from typing import Optional, Dict, Any, List
 from datetime import datetime
 
-from backend.app.ai.client import OpenRouterClient
-from backend.app.prompts import (
+from backend.ai.client import OpenRouterClient
+from backend.ai.prompts import (
     ComponentType,
     PreprocessingTask,
     PromptRepository

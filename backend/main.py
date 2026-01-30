@@ -6,7 +6,7 @@ import logging
 import os
 
 # Импортируем blueprint из правильного места
-from backend.app.api.search_blueprint import search_bp
+from backend.api.search_blueprint import search_bp
 
 # Инициализация логгера
 logging.basicConfig(level=logging.INFO)
@@ -37,7 +37,7 @@ class App:
         logger.info("FlaskApp initialized")
 
     def _configure_app(self, config_class):
-        from backend.app.config import Config, DevelopmentConfig, ProductionConfig
+        from backend.config import Config, DevelopmentConfig, ProductionConfig
 
         if config_class:
             self.app.config.from_object(config_class)

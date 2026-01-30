@@ -1,7 +1,6 @@
 # backend/app/services/excel_service.py
 import pandas as pd
 import os
-from backend.app.config import Config
 
 EXCEL_DIR = os.path.join(os.getcwd(), 'exports')
 os.makedirs(EXCEL_DIR, exist_ok=True)

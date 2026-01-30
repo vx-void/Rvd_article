@@ -1,10 +1,8 @@
 # backend/app/api/search_blueprint.py
 
-from flask import Blueprint, request, jsonify, send_file
-from backend.app.services import rmq_producer
+from flask import Blueprint, request, jsonify
+from backend.services import rmq_producer
 import uuid
-import hashlib
-import os
 
 search_bp = Blueprint('search_bp', __name__)
 

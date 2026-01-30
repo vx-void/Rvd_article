@@ -3,7 +3,7 @@ import logging
 from typing import Optional, Dict, Any
 from openai import OpenAI
 from openai import APIConnectionError, APIError, RateLimitError
-from backend.app.ai.models.ai_models import get_api_key, get_default_model, get_timeout
+from backend.ai.models.ai_models import get_api_key, get_default_model, get_timeout
 
 
 logger = logging.getLogger(__name__)
