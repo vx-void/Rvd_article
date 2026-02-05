@@ -7,7 +7,6 @@ import logging
 
 from backend.services.ai_service import AIService
 from backend.services.db_service import DBService
-from backend.services import excel_service
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
