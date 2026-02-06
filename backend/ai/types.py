@@ -1,6 +1,7 @@
-# hydro_find/prompts/types.py
+# ../ai/types.py
 
 from enum import Enum
+
 
 class ComponentType(str, Enum):
     FITTINGS = "fittings"
@@ -12,7 +13,8 @@ class ComponentType(str, Enum):
     BRS = "brs"
     COUPLING = "coupling"
 
+
 class PreprocessingTask(str, Enum):
-    SPLIT = "split"
-    QUANTITY = "quantity"
     CLASSIFY = "classify"
+    QUANTITY = "quantity"
+    SPLIT = "split"
