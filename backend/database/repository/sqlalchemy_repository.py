@@ -1,9 +1,9 @@
 from sqlalchemy.orm import Session
-from backend.app.database.filters.component_filter import ComponentFilter
-from backend.app.database.interfaces.repository import ComponentRepositoryInterface
+from backend.database.filters.component_filter import ComponentFilter
+from backend.database.interfaces.repository import IComponentRepository
 
 
-class SqlAlchemyComponentRepository(ComponentRepositoryInterface):
+class SqlAlchemyComponentRepository(IComponentRepository):
 
     def __init__(self, session: Session):
         self.session = session

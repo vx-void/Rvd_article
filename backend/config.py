@@ -3,14 +3,16 @@ from dotenv import load_dotenv
 
 load_dotenv()  # Загрузка переменных окружения из .env
 
-
 class Config:
     # Database
-    DATABASE_URL = os.environ.get('DATABASE_URL')
 
-    # Redis
-    REDIS_HOST = os.environ.get('REDIS_HOST', 'localhost')
-    REDIS_PORT = 6379
+    PG_USER = os.getenv("PG_USER")
+    PG_PASSWORD = os.getenv("PG_PASSWORD")
+    PG_HOST = os.getenv("PG_HOST")
+    PG_PORT = os.getenv("PG_PORT")
+    PG_DATABASE = os.getenv("PG_DATABASE")
+
+    DATABASE_URL = os.getenv('DATABASE_URL')
 
     # RabbitMQ
     RABBITMQ_HOST = os.environ.get('RABBITMQ_HOST')
@@ -19,18 +21,10 @@ class Config:
     RABBITMQ_PASS = os.environ.get('RABBITMQ_PASS')
     RABBITMQ_VHOST = os.environ.get('RABBITMQ_VHOST')
 
+    RABBITMQ_QUEUE = os.getenv("RABBITMQ_QUEUE")
 
     # OpenRouter
     API_OPEN_ROUTER = os.environ.get('API_OPEN_ROUTER')
-
-    # Supabase config
-    SUPABASE_URL = os.environ.get('SUPABASE_URL')
-    SUPABASE_KEY = os.environ.get('SUPABASE_KEY')
-    SUPABASE_HOST = os.environ.get('SUPABASE_HOST')
-    SUPABASE_DATABASE = os.environ.get('SUPABASE_DATABASE')
-    SUPABASE_USER = os.environ.get('SUPABASE_USER')
-    SUPABASE_PASSWORD = os.environ.get('SUPABASE_PASSWORD')
-    SUPABASE_PORT = os.environ.get('SUPABASE_PORT')
 
 
 class DevelopmentConfig(Config):

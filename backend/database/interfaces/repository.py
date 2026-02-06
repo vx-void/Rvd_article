@@ -5,7 +5,7 @@ from backend.database.models.base_component import HydraulicComponent
 from backend.database.filters.component_filter import ComponentFilter
 
 
-class ComponentRepositoryInterface(ABC):
+class IComponentRepository(ABC):
 
     @abstractmethod
     def find(self, filters: ComponentFilter) -> List[HydraulicComponent]:
