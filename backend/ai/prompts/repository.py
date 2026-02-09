@@ -1,12 +1,12 @@
-from backend.ai.interfaces.prompt_repository import PromptRepositoryInterface
-from backend.ai.types import ComponentType, PreprocessingTask
-from backend.ai.specs import (
+from backend.ai.interfaces.prompt_repository import IPromptRepository
+from backend.ai.prompts.types import ComponentType, PreprocessingTask
+from backend.ai.prompts.specs import (
     COMPONENT_PROMPTS,
     PREPROCESSING_PROMPTS
 )
 
 
-class PromptRepository(PromptRepositoryInterface):
+class PromptRepository(IPromptRepository):
 
     def get_component_prompt(self, component: ComponentType) -> str:
         return COMPONENT_PROMPTS[component.value]

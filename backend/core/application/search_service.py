@@ -1,14 +1,9 @@
-from typing import Protocol
-
-from .dto import TaskDTO, SearchCommand
+from typing import Optional, Protocol
+from .dto import TaskDTO, SearchCommand, ResultDTO
 from .task_service import TaskService
 
 
 class MessageBroker(Protocol):
-    """
-    Абстракция брокера сообщений.
-    """
-
     def publish(self, message: dict) -> None:
         ...
 
@@ -20,11 +15,15 @@ class SearchService:
     """
 
     def __init__(
-        self,
-        task_service: TaskService,
-        message_broker: MessageBroker
-
+            self,
+            task_service: TaskService,
+            message_broker: MessageBroker
     ) -> None:
+        if task_service is None:
+            raise ValueError("task_service cannot be None")
+        if message_broker is None:
+            raise ValueError("message_broker cannot be None")
+
         self._task_service = task_service
         self._message_broker = message_broker
 
@@ -32,26 +31,44 @@ class SearchService:
         """
         Инициация обработки поискового запроса.
         """
-
         self._validate(command)
 
-        # 1. Создание задачи
-        task_id = self._task_service.create_task()
+        task_id = None
+        try:
+            # 1. Создание задачи
+            task_id = self._task_service.create_task()
 
-        # 2. Формирование сообщения
-        message = {
-            "task_id": task_id,
-            "query": command.query,
-        }
+            # 2. Формирование сообщения
+            message = {
+                "task_id": task_id,
+                "query": command.query,
+            }
 
-        # 3. Публикация в очередь
-        self._message_broker.publish(message)
+            # 3. Публикация в очередь
+            self._message_broker.publish(message)
 
-        # 4. Возврат клиенту идентификатора задачи
-        return TaskDTO(
-            task_id=task_id,
-            status="PENDING"
-        )
+            # 4. Возврат клиенту идентификатора задачи
+            return TaskDTO(
+                task_id=task_id,
+                status="PENDING"
+            )
+
+        except Exception as e:
+            # Если ошибка, обновляем статус задачи
+            if task_id:
+                self._task_service.update_status(task_id, "FAILED")
+            # Логируем ошибку
+            # logger.error(f"Failed to execute search: {e}")
+            raise
+
+    def get_status(self, task_id: str) -> Optional[ResultDTO]:
+        """
+        Получение статуса задачи по ID.
+        """
+        if not task_id:
+            raise ValueError("task_id cannot be empty")
+
+        return self._task_service.get_result(task_id)
 
     def _validate(self, command: SearchCommand) -> None:
         """
@@ -62,3 +79,7 @@ class SearchService:
 
         if len(command.query) > 1024:
             raise ValueError("Search query exceeds maximum length")
+
+        # Дополнительная валидация
+        if not isinstance(command.query, str):
+            raise ValueError("Search query must be a string")

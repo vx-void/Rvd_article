@@ -1,7 +1,3 @@
-import os
-from urllib.parse import quote_plus
-
-import config
 from flask import Flask
 from flask_cors import CORS
 
@@ -23,65 +19,58 @@ from database.repository.sqlalchemy_repository import SqlAlchemyComponentReposit
 
 
 def create_app(config_class: type[Config] = Config) -> Flask:
-    """
-    Фабрика веб-приложения.
-    """
-
     app = Flask(__name__)
     app.config.from_object(config_class)
 
     CORS(app)
 
-    # -------------------------
-    # Инициализация инфраструктуры
-    # -------------------------
-
-
+    # --- Database ---
     db_connection = DatabaseConnection(
         database_url=app.config["DATABASE_URL"]
     )
     session = db_connection.get_session()
-
     repository = SqlAlchemyComponentRepository(session)
 
+    # --- Messaging ---
     producer = RabbitMQProducer(
         host=app.config["RABBITMQ_HOST"],
-        queue_name=app.config["RABBITMQ_QUEUE"]
+        queue_name=app.config["RABBITMQ_QUEUE"],
+        username=app.config.get("RABBITMQ_USER"),
+        password=app.config.get("RABBITMQ_PASS"),
     )
+    producer.connect()  # критически важно
 
+    # --- Application services ---
     task_service = TaskService(repository=repository)
 
     search_service = SearchService(
-        producer=producer,
-        task_service=task_service
+        task_service=task_service,
+        message_broker=producer
     )
 
-    # -------------------------
-    # Создание Blueprint через фабрику
-    # -------------------------
-
+    # --- API ---
     search_bp = create_search_blueprint(search_service)
-
     app.register_blueprint(search_bp)
-
-    # -------------------------
-    # Обработчики ошибок
-    # -------------------------
-
-    @app.errorhandler(404)
-    def not_found(error):
-        return {"error": "Not found"}, 404
-
-    @app.errorhandler(500)
-    def internal_error(error):
-        return {"error": "Internal server error"}, 500
 
     return app
 
 
+# Глобальный объект для flask run
+app = create_app()
+
+
 if __name__ == "__main__":
-    app = create_app()
+    print("Registered routes:")
+    for rule in app.url_map.iter_rules():
+        print(f"{rule.methods} -> {rule}")
+
+
+    @app.route("/ping")
+    def ping():
+        return {"status": "ok"}
+
     app.run(
         host="0.0.0.0",
-        port=app.config.get("PORT", 5000)
+        port=app.config.get("PORT", 5000),
+        debug=True
     )

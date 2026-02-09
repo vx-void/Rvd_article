@@ -2,21 +2,13 @@ from flask import Blueprint, request
 
 from ..application.dto import SearchCommand
 from ..application.search_service import SearchService
-from ..application.task_service import TaskService
-from ..messaging.producer import RabbitMQProducer
 from .responses import SuccessResponse, ErrorResponse
 
 
-def create_search_blueprint(
-    search_service: SearchService
-) -> Blueprint:
-    """
-    Фабрика Blueprint с внедрением зависимостей.
-    """
+def create_search_blueprint(search_service: SearchService) -> Blueprint:
+    bp = Blueprint("search", __name__)
 
-    search_bp = Blueprint("search", __name__)
-
-    @search_bp.route("/search", methods=["POST"])
+    @bp.route("/api/search", methods=["POST"])
     def initiate_search():
         data = request.get_json(silent=True) or {}
         query = data.get("query", "")
@@ -42,7 +34,7 @@ def create_search_blueprint(
                 status_code=500
             ).to_response()
 
-    @search_bp.route("/status/<task_id>", methods=["GET"])
+    @bp.route("/api/status/<task_id>", methods=["GET"])
     def get_status(task_id: str):
         try:
             result = search_service.get_status(task_id)
@@ -74,4 +66,7 @@ def create_search_blueprint(
                 status_code=500
             ).to_response()
 
-    return search_bp
+
+
+
+    return bp

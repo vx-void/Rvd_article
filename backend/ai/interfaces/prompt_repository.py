@@ -1,9 +1,9 @@
 #../interfaces/prompt_repository.py
 from abc import ABC, abstractmethod
-from backend.ai.types import ComponentType, PreprocessingTask
+from backend.ai.prompts.types import ComponentType, PreprocessingTask
 
 
-class PromptRepositoryInterface(ABC):
+class IPromptRepository(ABC):
 
     @abstractmethod
     def get_component_prompt(self, component: ComponentType) -> str:

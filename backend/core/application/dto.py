@@ -18,7 +18,7 @@ class ResultItemDTO:
     """
     article: str
     name: str
-    quantity: Optional[int] = None
+    quantity: int = 1
 
 
 @dataclass

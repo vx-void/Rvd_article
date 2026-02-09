@@ -1,18 +1,18 @@
-from typing import Dict, Any, List
+from typing import Dict, Any
 from datetime import datetime
 
-from backend.ai.interfaces.ai_client import AIClientInterface
-from backend.ai.interfaces.prompt_repository import PromptRepositoryInterface
+from backend.ai.interfaces.ai_client import IAIClient
+from backend.ai.interfaces.prompt_repository import IPromptRepository
 from backend.ai.parser import AIResponseParser
-from backend.ai.types import ComponentType, PreprocessingTask
+from backend.ai.prompts.types import ComponentType, PreprocessingTask
 
 
 class AIProcessingService:
 
     def __init__(
         self,
-        client: AIClientInterface,
-        prompts: PromptRepositoryInterface
+        client: IAIClient,
+        prompts: IPromptRepository
     ):
         self.client = client
         self.prompts = prompts

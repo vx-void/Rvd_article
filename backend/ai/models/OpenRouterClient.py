@@ -1,17 +1,17 @@
-#../ai/client.py
+#../ai/OpenRouterClient.py
 
 import json
 import logging
 from typing import Optional, Dict, Any
 from openai import OpenAI, APIError, APIConnectionError, RateLimitError
 
-from backend.ai.interfaces.ai_client import AIClientInterface
-from backend.ai.models import get_api_key, get_default_model, get_timeout
+from backend.ai.interfaces.ai_client import IAIClient
+from backend.ai.models.models import get_api_key, get_default_model, get_timeout
 
 logger = logging.getLogger(__name__)
 
 
-class OpenRouterClient(AIClientInterface):
+class OpenRouterClient(IAIClient):
 
     def __init__(self):
         self.api_key = get_api_key()
