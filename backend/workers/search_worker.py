@@ -1,14 +1,14 @@
 from typing import List
 
-from backend.core.messaging.consumer import RabbitMQConsumer
-from backend.core.messaging.message import Message
+from core.messaging.consumer import RabbitMQConsumer
+from core.messaging.message import Message
 
-from backend.core.application.task_service import TaskService
-from backend.core.application.dto import ResultItemDTO
+from core.application.task_service import TaskService
+from core.application.dto import ResultItemDTO
 
-from backend.ai.service import AIService
-from backend.database.repository import ComponentRepository
-from backend.database.component_filter import ComponentFilter
+from ai.service import AIService
+from database.repository import ComponentRepository
+from database.filters.component_filter import ComponentFilter
 
 
 class SearchWorker:
