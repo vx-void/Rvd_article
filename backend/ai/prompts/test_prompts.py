@@ -23,11 +23,11 @@ def test_prompt_loading():
         # Создаем репозиторий
         repo = PromptRepository()
         
-        print(f"📁 Директория промптов: {repo.prompts_dir}")
+        print(f"Директория промптов: {repo.prompts_dir}")
         print()
         
         # Тестируем загрузку промптов предобработки
-        print("📋 Промпты предобработки:")
+        print("Промпты предобработки:")
         for task in PreprocessingTask:
             try:
                 prompt = repo.get_preprocessing_prompt(task)
@@ -47,10 +47,10 @@ def test_prompt_loading():
                 print(f"  {component.value}: ОШИБКА - {e}")
         
         print()
-        print("✅ Тест загрузки промптов завершен успешно!")
+        print("Тест загрузки промптов завершен успешно!")
         
         # Показываем содержимое директории
-        print("\n📁 Файлы в директории промптов:")
+        print("\nФайлы в директории промптов:")
         for file_path in repo.prompts_dir.glob("*"):
             if file_path.is_file():
                 size = file_path.stat().st_size
@@ -64,7 +64,7 @@ def test_prompt_loading():
 
 def test_fittings_prompt():
     """Тест загрузки промпта для фитингов"""
-    print("\n🧪 Тестирование промпта для фитингов")
+    print("\nТестирование промпта для фитингов")
     print("=" * 50)
     
     try:
@@ -73,7 +73,7 @@ def test_fittings_prompt():
         # Загружаем промпт для фитингов
         prompt = repo.get_component_prompt(ComponentType.FITTINGS)
         
-        print(f"📄 Промпт для фитингов (первые 200 символов):")
+        print(f"Промпт для фитингов (первые 200 символов):")
         print("-" * 50)
         print(prompt[:200] + "..." if len(prompt) > 200 else prompt)
         print("-" * 50)
@@ -87,19 +87,19 @@ def test_fittings_prompt():
                 missing_keywords.append(keyword)
         
         if missing_keywords:
-            print(f"⚠️ В промпте отсутствуют ключевые слова: {missing_keywords}")
+            print(f"В промпте отсутствуют ключевые слова: {missing_keywords}")
         else:
-            print("✅ Промпт содержит все необходимые ключевые слова")
+            print("Промпт содержит все необходимые ключевые слова")
         
-        print(f"📏 Длина промпта: {len(prompt)} символов")
+        print(f"Длина промпта: {len(prompt)} символов")
         
     except Exception as e:
-        print(f"❌ Ошибка: {e}")
+        print(f"Ошибка: {e}")
 
 
 def save_test_prompts():
     """Сохранение тестовых промптов"""
-    print("\n💾 Сохранение тестовых промптов")
+    print("\Сохранение тестовых промптов")
     print("=" * 50)
     
     try:
@@ -135,7 +135,7 @@ def save_test_prompts():
 
 
 if __name__ == "__main__":
-    print("🚀 Запуск тестов загрузки промптов из файлов")
+    print("Запуск тестов загрузки промптов из файлов")
     print()
     
     # Создаем директорию для промптов, если её нет

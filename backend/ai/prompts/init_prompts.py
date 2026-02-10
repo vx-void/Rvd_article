@@ -1,5 +1,4 @@
-# ai/prompts/init_prompts.py
-#!/usr/bin/env python3
+
 """
 Утилита для инициализации промптов из файла fittings.txt
 """
@@ -11,7 +10,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from ai.prompts.repository import PromptRepository
-from ai.prompts.types import ComponentType, PreprocessingTask
+from ai.prompts.types import ComponentType
 
 
 def initialize_prompts_from_file(prompts_dir: str = None):

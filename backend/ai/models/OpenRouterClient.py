@@ -4,24 +4,26 @@ import json
 import logging
 from typing import Optional, Dict, Any
 from openai import OpenAI, APIError, APIConnectionError, RateLimitError
-
+from dotenv import load_dotenv
 from ai.interfaces.ai_client import IAIClient
-from ai.models.models import get_api_key, get_default_model, get_timeout
+
 
 logger = logging.getLogger(__name__)
 
+load_dotenv()
 
 class OpenRouterClient(IAIClient):
 
     def __init__(self):
-        self.api_key = get_api_key()
-        self.model = get_default_model()
-        self.timeout = get_timeout()
+        self.api_key = self._get_api_key()
+        self.model = self._get_default_model()
+        self.timeout = self._get_timeout()
 
         self._client = OpenAI(
             base_url="https://openrouter.ai/api/v1",
             api_key=self.api_key,
             timeout=self.timeout,
+            temperature=0.2,
             max_retries=3
         )
 
@@ -54,3 +56,18 @@ class OpenRouterClient(IAIClient):
             return json.loads(text[start:end + 1])
         except Exception:
             return None
+
+    def _get_api_key() -> str:
+        return os.getenv("API_OPEN_ROUTER")
+    
+    def _get_default_model() -> str:
+        return os.getenv("GEMMA_3_27B_IT")
+    
+    def _get_timeout() -> int:  # TO DO
+        return 120
+    
+
+
+    if __name__ == "__main__":
+        openRouter = OpenRouterClient()
+        print = openRouter.generate("проверка связи", "Ghbdtn")
