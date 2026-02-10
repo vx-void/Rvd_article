@@ -10,7 +10,7 @@
         ref="textareaRef"
         v-model="localText"
         class="search-textarea"
-        placeholder="Пример: Фитинг 1/2 BSP x2, Переходник 3/4 JIC, Заглушка M16"
+        placeholder="Пример: Фитинг 1/2 BSP , Переходник 3/4 JIC, Заглушка M16"
         rows="8"
         @keydown.ctrl.enter="handleSearch"
         @keydown.meta.enter="handleSearch"
