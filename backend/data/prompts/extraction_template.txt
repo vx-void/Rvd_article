@@ -1,0 +1,53 @@
+{system_prompt}
+
+ЗАПРОС КЛИЕНТА:
+"{user_query}"
+
+Извлеки параметры и верни строго в формате JSON:
+
+{{
+  "standard": "BSP|DKOL|DKOS|JIC|NPT|ORFS|null",
+  "thread": "размер резьбы или null (например: '1/2', 'M18x1.5', '3/4')",
+  "armature": "male|female|null",
+  "angle": число или null (0, 45, 90),
+  "dy": число или null (6, 8, 10, 12, 16, 20, 25),
+  "component_type": "fitting|adapter|plug|null",
+  "confidence": "high|medium|low"
+}}
+
+ПРИМЕРЫ:
+
+Запрос: "Нужен уголок 1/2 BSP папа"
+Ответ: {{
+  "standard": "BSP",
+  "thread": "1/2",
+  "armature": "male",
+  "angle": 90,
+  "dy": null,
+  "component_type": "fitting",
+  "confidence": "high"
+}}
+
+Запрос: "футорка DKOL 18"
+Ответ: {{
+  "standard": "DKOL",
+  "thread": "M18x1.5",
+  "armature": null,
+  "angle": null,
+  "dy": null,
+  "component_type": "adapter",
+  "confidence": "medium"
+}}
+
+Запрос: "переходник с 3/4 на м22"
+Ответ: {{
+  "standard": "BSP-DKOS",
+  "thread": "3/4-M22x1.5",
+  "armature": null,
+  "angle": 0,
+  "dy": null,
+  "component_type": "adapter",
+  "confidence": "medium"
+}}
+
+ТВОЙ ОТВЕТ (только JSON, без пояснений):
