@@ -1,26 +1,59 @@
-# Environment variables
-.env
-
-!.env.example
-
 # Python
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[cod]
+*$py.class
+*.so
 .Python
-env/
 venv/
+env/
+ENV/
 .venv/
-pip-log.txt
-pip-delete-this-directory.txt
+*.egg-info/
+dist/
+build/
+*.egg
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# Node
+node_modules/
+dist/
+dist-ssr/
+*.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Data
+data/chroma/
+data/*.db
+data/*.sqlite
+backups/
+*.tar.gz
+
+# Environment
+.env
+.env.local
+.env.*.local
 
 # IDE
 .idea/
 .vscode/
 *.swp
 *.swo
+*~
 
 # OS
 .DS_Store
 Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Docker
+.docker/
