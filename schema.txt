@@ -1,0 +1,71 @@
+hydro-search/
+├── 📂 app/                      # Основное приложение (FastAPI)
+│   ├── __init__.py
+│   ├── main.py                  # Точка входа (was: main.py)
+│   ├── config.py                # Настройки (Pydantic Settings)
+│   ├── dependencies.py          # DI: get_rag_service(), get_llm_client()
+│   │
+│   ├── 📂 api/                  # Роутеры
+│   │   ├── __init__.py
+│   │   ├── search.py            # /api/search
+│   │   ├── health.py            # /api/health
+│   │   └── models.py            # /api/models
+│   │
+│   ├── 📂 core/                 # Бизнес-логика
+│   │   ├── __init__.py
+│   │   ├── rag_service.py       # (was: rag_service.py)
+│   │   ├── indexer.py           # (was: indexer.py)
+│   │   └── embeddings.py        # Новое: обёртка над эмбеддером
+│   │
+│   ├── 📂 clients/              # Внешние API
+│   │   ├── __init__.py
+│   │   └── openrouter.py        # (was: openrouter_client.py)
+│   │
+│   └── 📂 models/               # Pydantic модели
+│       ├── __init__.py
+│       ├── article.py           # Article
+│       ├── search.py            # SearchRequest/Response/Result
+│       └── extraction.py        # ExtractedParams
+│
+├── 📂 frontend/                 # Vue 3 приложение
+│   ├── index.html               # (was: index.html)
+│   ├── package.json
+│   ├── vite.config.js
+│   └── 📂 src/
+│       ├── main.js
+│       ├── App.vue
+│       ├── 📂 components/
+│       ├── 📂 composables/      # useSearch(), useExport()
+│       └── 📂 api/              # Клиент для backend
+│
+├── 📂 data/                     # Данные (gitignored, кроме примеров)
+│   ├── 📂 prompts/              # Промпты для LLM
+│   │   ├── system.txt           # (was: system.txt)
+│   │   └── extraction.txt       # (was: extraction_template.txt)
+│   │
+│   ├── 📂 raw/                  # Исходные данные
+│   │   └── articles.json        # (was: articles.json)
+│   │
+│   └── 📂 chroma/               # Векторная БД (gitignored)
+│
+├── 📂 tests/                    # Тесты
+│   ├── 📂 unit/
+│   ├── 📂 integration/
+│   └── 📂 fixtures/
+│       └── sample_articles.json
+│
+├── 📂 scripts/                  # Утилиты
+│   ├── seed_db.py               # Заполнение тестовыми данными
+│   ├── reindex.py               # Переиндексация
+│   └── backup_chroma.py
+│
+├── 📂 docker/                   # Docker-конфиги
+│   ├── Dockerfile.backend
+│   ├── Dockerfile.frontend
+│   └── docker-compose.yml
+│
+├── .env.example                 # Шаблон переменных окружения
+├── .env                         # Локальные секреты (gitignored)
+├── pyproject.toml               # Зависимости Python (poetry/pip)
+├── requirements.txt             # Fallback
+└── README.md
