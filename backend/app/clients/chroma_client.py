@@ -32,7 +32,7 @@ class ChromaManager:
 
         settings = get_settings()
 
-        self.persist_dir = settings.chroma_path
+        self.persist_dir = settings.chroma_persist_dir
         self.collection_name = settings.chroma_collection
 
         # ChromaDB client (thread-safe for reads)

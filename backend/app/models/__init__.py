@@ -4,8 +4,7 @@ from backend.app.models.search import (
     SearchRequest,
     SearchResult,
     SearchResponse,
-    HealthResponse,
-    SearchMetrics,
+    HealthResponse
 )
 
 __all__ = [
@@ -17,5 +16,5 @@ __all__ = [
     "SearchResult",
     "SearchResponse",
     "HealthResponse",
-    "SearchMetrics",
+
 ]

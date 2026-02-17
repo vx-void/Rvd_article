@@ -6,8 +6,6 @@ from backend.app.config import get_settings
 from backend.app.core.rag_service import RAGService
 from backend.app.exceptions import AuthenticationError, RateLimitExceeded
 from backend.app.logging_config import get_logger
-from backend.app.services.auth import AuthService
-from backend.app.services.rate_limit import RateLimitService
 
 logger = get_logger("dependencies")
 

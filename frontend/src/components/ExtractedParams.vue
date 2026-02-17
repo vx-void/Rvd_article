@@ -1,6 +1,6 @@
 <template>
   <div class="extracted">
-    <h4>AI извлек из запроса:</h4>
+    <h4>Распознано в запросе:</h4>
     <div class="grid">
       <div class="item">
         <span class="label">Стандарт:</span>
@@ -24,18 +24,6 @@
         <span class="label">Угол:</span>
         <span :class="['value', params.angle === null && 'empty']">
           {{ params.angle !== null ? params.angle + '°' : 'не указан' }}
-        </span>
-      </div>
-      <div class="item">
-        <span class="label">Dy:</span>
-        <span :class="['value', params.dy === null && 'empty']">
-          {{ params.dy !== null ? params.dy + ' мм' : 'не указан' }}
-        </span>
-      </div>
-      <div class="item">
-        <span class="label">Деталь:</span>
-        <span :class="['value', !params.component_type && 'empty']">
-          {{ params.component_type || 'не определен' }}
         </span>
       </div>
     </div>

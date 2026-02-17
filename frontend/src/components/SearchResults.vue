@@ -15,7 +15,7 @@
           <th>Наименование</th>
           <th>Описание</th>
           <th>Уверенность</th>
-          <th>Совпадения</th>
+          <th>Параметры</th>
         </tr>
       </thead>
       <tbody>
@@ -24,13 +24,12 @@
           <td class="name">{{ result.name }}</td>
           <td class="desc">{{ result.description || '-' }}</td>
           <td :class="['confidence', getConfidenceClass(result.confidence)]">
-            {{ formatPercent(result.confidence) }}
+            {{ Math.round(result.confidence * 100) }}%
           </td>
-          <td class="matches">
-            <span v-for="match in result.parameter_matches" :key="match" class="tag">
-              {{ match }}
-            </span>
-            <span v-if="!result.parameter_matches.length" class="empty">семантический поиск</span>
+          <td class="params">
+            <span v-if="result.standard">{{ result.standard }}</span>
+            <span v-if="result.thread">/ {{ result.thread }}</span>
+            <span v-if="result.angle !== null">/ {{ result.angle }}°</span>
           </td>
         </tr>
       </tbody>
@@ -45,8 +44,6 @@ defineProps({
 });
 
 defineEmits(['export']);
-
-const formatPercent = (val) => Math.round(val * 100) + '%';
 
 const formatTime = (ms) => {
   if (ms < 1000) return Math.round(ms) + ' мс';
@@ -124,16 +121,8 @@ tr:hover { background: #f8f9fa; }
 .confidence.medium { color: #ffc107; }
 .confidence.low { color: #dc3545; }
 
-.tag {
-  display: inline-block;
-  padding: 2px 8px;
-  background: #e9ecef;
-  border-radius: 4px;
-  margin: 2px;
-  font-size: 12px;
-}
-
-.empty { color: #bbb; font-style: italic; }
+.params { color: #666; font-size: 12px; }
+.params span { margin-right: 4px; }
 
 button {
   padding: 8px 16px;

@@ -1,7 +1,7 @@
 import { ref } from 'vue';
 import { searchService } from '../services/api.js';
 
-export function useSearch(apiKey) {
+export function useSearch() {
   const loading = ref(false);
   const error = ref(null);
   const results = ref([]);
@@ -15,7 +15,7 @@ export function useSearch(apiKey) {
     searched.value = true;
 
     try {
-      const response = await searchService.search(query, apiKey.value);
+      const response = await searchService.search(query);
       results.value = response.results;
       metrics.value = response.metrics;
       extractedParams.value = response.extracted_params;

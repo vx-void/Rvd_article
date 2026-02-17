@@ -1,50 +1,29 @@
-from typing import Any, List, Optional
-from pydantic import BaseModel, Field, field_validator
+"""Модели данных."""
+
+from typing import Optional, List, Dict, Any
+from pydantic import BaseModel, Field
 
 
-class SearchRequest(BaseModel):
-    query: str = Field(
-        ...,
-        min_length=1,
-        max_length=1000,
-        description="Search query in natural language"
-    )
-    top_k: int = Field(5, ge=1, le=20, description="Number of results to return")
-    min_confidence: Optional[float] = Field(
-        None,
-        ge=0,
-        le=1,
-        description="Minimum confidence threshold"
-    )
-    filters: Optional[dict[str, Any]] = Field(
-        None,
-        description="Optional filters: standard, armature, etc."
-    )
-
-    @field_validator("query")
-    @classmethod
-    def sanitize_query(cls, v: str) -> str:
-        return v.strip().replace("\x00", "")
+class ExtractedParams(BaseModel):
+    """Извлеченные параметры."""
+    standard: Optional[str] = None
+    thread: Optional[str] = None
+    armature: Optional[str] = None
+    angle: Optional[int] = None
+    dy: Optional[int] = None
+    component_type: Optional[str] = None
+    confidence: str = "medium"
 
 
 class SearchResult(BaseModel):
-
-    article: str = Field(..., description="Article number")
-    name: str = Field(..., description="Product name")
-    description: Optional[str] = Field(None, description="Product description")
-
-    confidence: float = Field(..., ge=0, le=1, description="Final confidence score")
-    base_similarity: float = Field(..., ge=0, le=1, description="Semantic similarity")
-    parameter_matches: List[str] = Field(
-        default_factory=list,
-        description="List of matched parameters"
-    )
-
-    extracted_params: dict[str, Any] = Field(
-        default_factory=dict,
-        description="Parameters extracted from query"
-    )
-
+    """Результат поиска."""
+    article: str
+    name: str
+    description: Optional[str] = None
+    confidence: float
+    base_similarity: float
+    parameter_matches: List[str] = Field(default_factory=list)
+    extracted_params: Dict[str, Any] = Field(default_factory=dict)
     standard: Optional[str] = None
     thread: Optional[str] = None
     armature: Optional[str] = None
@@ -53,26 +32,24 @@ class SearchResult(BaseModel):
     price: Optional[float] = None
 
 
-class SearchMetrics(BaseModel):
-    total_results: int = 0
-    processing_time_ms: float = 0.0
-    extraction_time_ms: Optional[float] = None
-    retrieval_time_ms: Optional[float] = None
-    rerank_time_ms: Optional[float] = None
+class SearchRequest(BaseModel):
+    """Запрос на поиск."""
+    query: str = Field(..., min_length=1)
+    top_k: int = Field(5, ge=1, le=20)
 
 
 class SearchResponse(BaseModel):
+    """Ответ на поиск."""
     results: List[SearchResult]
     query: str
     total_found: int
-    metrics: SearchMetrics
-    extracted_params: Optional[dict[str, Any]] = None
+    processing_time_ms: float
 
 
 class HealthResponse(BaseModel):
+    """Health check."""
     status: str
     version: str
     environment: str
-    services: dict[str, str] = Field(default_factory=dict)
-    stats: dict[str, Any] = Field(default_factory=dict)
-    uptime_seconds: Optional[float] = None
+    services: Dict[str, str]
+    stats: Dict[str, Any]

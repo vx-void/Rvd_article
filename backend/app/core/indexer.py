@@ -6,7 +6,7 @@ from typing import List
 
 from backend.app.clients.chroma_client import ChromaManager
 from backend.app.config import get_settings
-from backend.app import EmbeddingService
+from backend.app.core.embeddings import EmbeddingService
 from backend.app.logging_config import get_logger
 from backend.app.models.article import Article
 

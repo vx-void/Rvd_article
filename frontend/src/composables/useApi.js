@@ -1,24 +1,31 @@
-import { ref } from 'vue';
-import { healthService } from '../services/api.js';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
-export function useApi() {
-  const isOnline = ref(false);
-  const serverStats = ref(null);
-
-  const checkHealth = async () => {
-    try {
-      const data = await healthService.check();
-      isOnline.value = data.status === 'healthy';
-      serverStats.value = data.stats;
-    } catch {
-      isOnline.value = false;
-      serverStats.value = null;
-    }
+async function request(url, options = {}) {
+  const headers = {
+    'Content-Type': 'application/json',
+    ...options.headers
   };
 
-  return {
-    isOnline,
-    serverStats,
-    checkHealth
-  };
+  const response = await fetch(`${API_URL}${url}`, {
+    ...options,
+    headers
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
+    throw new Error(error.detail || `Ошибка ${response.status}`);
+  }
+
+  return response.json();
 }
+
+export const healthService = {
+  check: () => request('/api/v1/health')
+};
+
+export const searchService = {
+  search: (query) => request('/api/v1/search', {
+    method: 'POST',
+    body: JSON.stringify({ query, top_k: 10 })
+  })
+};
