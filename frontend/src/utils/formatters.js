@@ -8,7 +8,7 @@ export function exportToExcel(results, query) {
     'Уверенность': Math.round(r.confidence * 100) + '%',
     'Стандарт': r.standard || '',
     'Резьба': r.thread || '',
-    'Тип': r.armature === 'male' ? 'папа' : r.armature === 'female' ? 'мама' : '',
+    'Тип': r.armature || '',
     'Угол': r.angle !== null ? r.angle + '°' : '',
     'Dy': r.dy !== null ? r.dy + ' мм' : ''
   }));

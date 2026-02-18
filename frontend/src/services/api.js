@@ -1,7 +1,7 @@
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 export async function search(query, top_k = 10) {
-  const response = await fetch(`${API_URL}/api/v1/search`, {
+  const response = await fetch(`${API_URL}/api/search`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ query, top_k }),
@@ -24,7 +24,7 @@ export function exportToExcel(results, query) {
       'Уверенность': Math.round(r.confidence * 100) + '%',
       'Стандарт': r.standard || '',
       'Резьба': r.thread || '',
-      'Тип': r.armature === 'male' ? 'папа' : r.armature === 'female' ? 'мама' : '',
+      'Тип': r.armature || '',
       'Угол': r.angle !== null ? r.angle + '°' : '',
     }));
 

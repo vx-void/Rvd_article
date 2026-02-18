@@ -15,10 +15,6 @@ logger = get_logger("openrouter")
 
 
 class OpenRouterClient:
-    """Thread-safe OpenRouter client with retries."""
-
-    BASE_URL = "https://openrouter.ai/api/v1"
-
     def __init__(
         self,
         api_key: Optional[str] = None,

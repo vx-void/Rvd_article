@@ -7,7 +7,8 @@ from pathlib import Path
 import chromadb
 from sentence_transformers import SentenceTransformer
 
-from backend.app.models.search import ExtractedParams, SearchResult
+from backend.app.models.search import SearchResult
+from backend.app.models.extraction import ExtractedParams, ExtractionConfidence
 from backend.app.config import get_settings
 
 
@@ -106,7 +107,7 @@ class RAGService:
                     armature=meta.get("armature"),
                     angle=meta.get("angle"),
                     dy=meta.get("dy"),
-                    price=meta.get("price"),
+
                 )
             )
 
@@ -131,7 +132,7 @@ class RAGService:
 
         # Стандарт
         standard = None
-        for std in ["BSP", "DKOL", "DKOS", "JIC", "NPT", "ORFS"]:
+        for std in ["BSP", "DKOL", "DKOS", "JIC", "JIS", "BSPT", "NPT", "ORFS"]:
             if std.lower() in query_lower:
                 standard = std
                 break
@@ -145,7 +146,7 @@ class RAGService:
 
         # Угол
         angle = None
-        if "90" in query or "уголок" in query_lower:
+        if "90" in query or "угол" in query_lower:
             angle = 90
         elif "45" in query:
             angle = 45

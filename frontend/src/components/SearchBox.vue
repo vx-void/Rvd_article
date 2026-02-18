@@ -1,7 +1,7 @@
 <template>
   <div class="search-box">
     <label>Опишите нужный компонент:</label>
-    <p class="hint">Примеры: "уголок 1/2 BSP папа", "фитинг DKOL M18 гайка"</p>
+    <p class="hint">Примеры: "уголок 1/2 BSP", "фитинг DKOL M18 гайка"</p>
 
     <textarea
       v-model="query"
@@ -16,7 +16,7 @@
         :disabled="loading || !query.trim()"
         class="primary"
       >
-        {{ loading ? 'Поиск...' : 'Найти компоненты' }}
+        {{ loading ? 'Поиск...' : 'Найти' }}
       </button>
       <button @click="clear" :disabled="loading">Очистить</button>
     </div>

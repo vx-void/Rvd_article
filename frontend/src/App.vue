@@ -10,7 +10,7 @@
       <!-- Сворачиваемое меню инструкции -->
       <div class="instruction-wrapper">
         <div class="instruction-header" @click="toggleInstructions">
-          <h2>📋 Инструкция</h2>
+          <h2>Инструкция</h2>
           <span class="toggle-icon">{{ instructionsVisible ? '▼' : '▶' }}</span>
         </div>
 
@@ -110,14 +110,9 @@ const extractedParams = ref(null);
 const searched = ref(false);
 const isOnline = ref(false);
 const serverStats = ref(null);
-const instructionsVisible = ref(true); // По умолчанию развернут
+const instructionsVisible = ref(false); // По умолчанию развернут
 
-const examples = [
-  'уголок 1/2 BSP папа',
-  'фитинг DKOL M18 гайка',
-  'переходник BSP-DKOS 1/2-M22',
-  'заглушка 3/8 дюйма',
-];
+
 
 
 const toggleInstructions = () => {

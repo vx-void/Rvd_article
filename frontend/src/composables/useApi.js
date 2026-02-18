@@ -20,11 +20,11 @@ async function request(url, options = {}) {
 }
 
 export const healthService = {
-  check: () => request('/api/v1/health')
+  check: () => request('/api/health')
 };
 
 export const searchService = {
-  search: (query) => request('/api/v1/search', {
+  search: (query) => request('/api/search', {
     method: 'POST',
     body: JSON.stringify({ query, top_k: 10 })
   })
