@@ -64,6 +64,7 @@ class OpenRouterClient:
         system_prompt: str,
         user_prompt: str,
         temperature: Optional[float] = None,
+        max_tokens: Optional[int] = None,
     ) -> str:
         """Generate text with retries."""
 
@@ -76,7 +77,7 @@ class OpenRouterClient:
             "model": self.model,
             "messages": messages,
             "temperature": temperature or self.temperature,
-            "max_tokens": self.max_tokens,
+            "max_tokens": self.max_tokens or self.max_tokens,
         }
 
         client = await self._get_client()

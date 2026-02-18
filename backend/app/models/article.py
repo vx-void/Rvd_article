@@ -3,7 +3,7 @@ from pydantic import BaseModel, Field, field_validator
 
 
 class Article(BaseModel):
-    article: str = Field(..., description="SKU/Article number", min_length=1)
+    article: str = Field(..., description="Article number", min_length=1)
     name: str = Field(..., description="Product name", min_length=1)
     description: Optional[str] = Field(None, description="Product description")
 
@@ -76,7 +76,3 @@ class Article(BaseModel):
             parts.append(f"Диаметр Dy {self.dy} мм")
 
         return ". ".join(filter(None, parts))
-
-
-class ArticleCreate(Article):
-    pass

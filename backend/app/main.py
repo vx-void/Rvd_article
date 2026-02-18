@@ -32,4 +32,4 @@ app.include_router(api_router, prefix="/api")
 
 @app.get("/")
 async def root():
-    return {"name": "Hydro Search API", "version": "1.2.0", "docs": "/docs"}
+    return {"name": "Hydro Search API", "version": "1.2.0"}

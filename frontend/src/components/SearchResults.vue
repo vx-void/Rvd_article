@@ -3,7 +3,6 @@
     <div class="header">
       <h2>Найдено {{ results.length }} совпадений</h2>
       <div class="stats">
-        <span v-if="metrics">Время: {{ formatTime(metrics.processing_time_ms) }}</span>
         <button @click="$emit('export')">Скачать Excel</button>
       </div>
     </div>
@@ -12,10 +11,10 @@
       <thead>
         <tr>
           <th>Артикул</th>
-          <th>Наименование</th>
           <th>Описание</th>
-          <th>Уверенность</th>
-          <th>Параметры</th>
+          <th>Наименование</th>
+          <th>Точность</th>
+
         </tr>
       </thead>
       <tbody>
@@ -26,11 +25,7 @@
           <td :class="['confidence', getConfidenceClass(result.confidence)]">
             {{ Math.round(result.confidence * 100) }}%
           </td>
-          <td class="params">
-            <span v-if="result.standard">{{ result.standard }}</span>
-            <span v-if="result.thread">/ {{ result.thread }}</span>
-            <span v-if="result.angle !== null">/ {{ result.angle }}°</span>
-          </td>
+
         </tr>
       </tbody>
     </table>

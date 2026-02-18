@@ -1,11 +1,12 @@
 """Embedding service with caching."""
 
 from typing import List
-
 from sentence_transformers import SentenceTransformer
-
 from backend.app.config import get_settings
 from backend.app.logging_config import get_logger
+import warnings
+
+warnings.filterwarnings("ignore", message="You are sending unauthenticated requests")
 
 logger = get_logger("embeddings")
 
