@@ -161,7 +161,7 @@ def process_adapters(refs):
     """Обработка переходников"""
     articles = []
 
-    rows, enc = read_csv_with_fallback('adapters_rows.csv')
+    rows, enc = read_csv_with_fallback('../adapters_rows.csv')
     print(f"  adapters_rows.csv: {enc} ({len(rows)} строк)")
 
     for row in rows:
@@ -248,7 +248,7 @@ def main():
     all_articles = fittings + adapters
 
     # Создаем директорию
-    output_path = Path('../../data/raw/articles.json')
+    output_path = Path('../../raw/articles.json')
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
     # Сохраняем в JSON

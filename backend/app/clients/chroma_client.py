@@ -39,7 +39,7 @@ class ChromaManager:
         self._client = chromadb.PersistentClient(
             path=self.persist_dir,
             settings=ChromaSettings(
-                anonymized_telemetry=settings.chroma_anonymized_telemetry,
+                anonymized_telemetry=False,
             ),
         )
 

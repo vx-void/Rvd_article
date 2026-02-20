@@ -15,7 +15,6 @@ class Article(BaseModel):
     dy: Optional[int] = Field(None, description="Nominal diameter Dy in mm", ge=4, le=100)
 
     # Additional
-    price: Optional[float] = Field(None, description="Price", ge=0)
     series: Optional[str] = Field(None, description="Series: light/heavy")
     component_type: Optional[str] = Field(None, description="fitting/adapter/plug")
 

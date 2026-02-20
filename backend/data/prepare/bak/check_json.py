@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 
 # Проверяем созданный файл
-json_path = Path('../../data/raw/articles.json')
+json_path = Path('../../raw/articles.json')
 
 if not json_path.exists():
     print(f"Файл не найден: {json_path}")

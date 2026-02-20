@@ -71,3 +71,5 @@ class ExtractedParams(BaseModel):
             "component_type": self.component_type,
             "confidence": self.confidence.value,
         }
+
+

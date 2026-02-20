@@ -8,8 +8,8 @@ import httpx
 from tenacity import retry, stop_after_attempt, wait_exponential
 
 from backend.app.config import get_settings
-from backend.app.exceptions import LLMError
 from backend.app.logging_config import get_logger
+
 
 logger = get_logger("openrouter")
 
@@ -24,7 +24,7 @@ class OpenRouterClient:
         timeout: int = 30,
     ):
         settings = get_settings()
-
+        #self.BASE_URL = load_dotenv('OPEN_ROUTER')
         self.api_key = api_key or settings.openrouter_api_key
         self.model = model or settings.openrouter_model
         self.temperature = temperature
@@ -63,8 +63,8 @@ class OpenRouterClient:
         self,
         system_prompt: str,
         user_prompt: str,
-        temperature: Optional[float] = None,
-        max_tokens: Optional[int] = None,
+        temperature  = 0.1,
+        max_tokens  = 300
     ) -> str:
         """Generate text with retries."""
 
@@ -77,14 +77,14 @@ class OpenRouterClient:
             "model": self.model,
             "messages": messages,
             "temperature": temperature or self.temperature,
-            "max_tokens": self.max_tokens or self.max_tokens,
+            "max_tokens": max_tokens or self.max_tokens,
         }
 
         client = await self._get_client()
 
         try:
             response = await client.post(
-                f"{self.BASE_URL}/chat/completions",
+                f"https://openrouter.ai/api/v1/chat/completions",
                 json=payload,
             )
             response.raise_for_status()
@@ -107,10 +107,10 @@ class OpenRouterClient:
                 status_code=e.response.status_code,
                 response=e.response.text,
             )
-            raise LLMError(f"OpenRouter HTTP error: {e.response.status_code}")
+            raise f"OpenRouter HTTP error: {e.response.status_code}"
         except Exception as e:
             logger.error("openrouter_error", error=str(e))
-            raise LLMError(f"OpenRouter error: {e}")
+            raise f"OpenRouter error: {e}"
 
     async def extract_json(
         self,
@@ -122,7 +122,8 @@ class OpenRouterClient:
         content = await self.generate(system_prompt, user_prompt, temperature)
         return self._parse_json(content)
 
-    def _parse_json(self, text: str) -> dict[str, Any]:
+    @staticmethod
+    def _parse_json(text: str) -> dict[str, Any]:
         """Extract JSON from LLM response."""
         text = text.strip()
 
